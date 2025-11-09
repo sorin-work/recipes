@@ -1,0 +1,58 @@
+# See https://help.github.com/articles/ignoring-files for more about ignoring files.
+*.rbc
+capybara-*.html
+.rspec
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/db/*.sqlite3-[0-9]*
+/public/system
+/coverage/
+/spec/tmp
+*.orig
+rerun.txt
+pickle-email-*.html
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+
+# Ignore uploaded files in development.
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/
+!/tmp/storage/.keep
+
+# Ignore precompiled assets.
+/public/assets
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+/config/credentials/*.key
+
+# Environment files with secrets.
+.env
+.env.*
+!.env.example
+
+# Bundler and gems installed into the project.
+/.bundle
+/vendor/bundle
+
+# Node (only used to run the JavaScript unit tests).
+/node_modules
+
+# Debugger and editor files.
+.byebug_history
+.rdbg_history
+.idea/
+.vscode/
+*.swp
+.DS_Store

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title><%= content_for(:title) || "Recipes" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -11,9 +11,6 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
@@ -23,7 +20,31 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="<%= content_for(:body_class) %>">
+    <header class="site-header">
+      <div class="site-header__inner">
+        <%= link_to "Recipes", root_path, class: "brand" %>
+        <% if authenticated? %>
+          <nav class="site-nav" id="site-nav" aria-label="Main">
+            <div class="site-nav__account">
+              <span class="site-nav__user"><%= Current.user.email_address %></span>
+              <%= button_to "Sign out", session_path, method: :delete, class: "button button--quiet button--small" %>
+            </div>
+          </nav>
+        <% end %>
+      </div>
+    </header>
+
+    <div class="flash-area">
+      <% flash.each do |type, message| %>
+        <div class="flash flash--<%= type == "alert" ? "alert" : "notice" %>" role="<%= type == "alert" ? "alert" : "status" %>">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
+
+    <main id="main" class="main <%= content_for(:main_class) %>">
+      <%= yield %>
+    </main>
   </body>
 </html>

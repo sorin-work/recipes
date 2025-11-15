@@ -1,0 +1,39 @@
+<% content_for :title, "Create an account" %>
+<% content_for :main_class, "main--narrow" %>
+
+<section class="card auth-card">
+  <h1>Create an account</h1>
+  <p class="muted">Keep your recipes, plan the week and get a grocery list that adds itself up.</p>
+
+  <%= form_with model: @user, url: registration_path, class: "form" do |form| %>
+    <% if @user.errors.any? %>
+      <div class="form-errors" role="alert">
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="field">
+      <%= form.label :name, "Your name" %>
+      <%= form.text_field :name, required: true, autofocus: true, maxlength: 80, autocomplete: "name" %>
+    </div>
+    <div class="field">
+      <%= form.label :email_address, "Email" %>
+      <%= form.email_field :email_address, required: true, autocomplete: "email" %>
+    </div>
+    <div class="field">
+      <%= form.label :password %>
+      <%= form.password_field :password, required: true, minlength: 8, maxlength: 72, autocomplete: "new-password" %>
+      <p class="hint">At least 8 characters.</p>
+    </div>
+    <div class="field">
+      <%= form.label :password_confirmation, "Repeat password" %>
+      <%= form.password_field :password_confirmation, required: true, maxlength: 72, autocomplete: "new-password" %>
+    </div>
+    <%= form.submit "Create account", class: "button button--primary button--block" %>
+  <% end %>
+
+  <p class="auth-card__links">Already have an account? <%= link_to "Sign in", new_session_path %></p>
+</section>

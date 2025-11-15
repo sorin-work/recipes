@@ -6,6 +6,9 @@ class User < ApplicationRecord
   normalizes :name, with: ->(name) { name.squish }
 
   validates :name, presence: true, length: { maximum: 80 }
+  validates :email_address, presence: true, uniqueness: true, length: { maximum: 254 },
+    format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :password, length: { minimum: 8, maximum: 72 }, allow_nil: true
 
   def first_name
     name.to_s.split.first

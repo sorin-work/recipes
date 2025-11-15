@@ -1,0 +1,16 @@
+/* Sign in, sign up and password reset */
+
+.auth-card {
+  margin-top: var(--space-6);
+}
+
+.auth-card h1 {
+  font-size: 1.6rem;
+}
+
+.auth-card__links {
+  margin: var(--space-4) 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}

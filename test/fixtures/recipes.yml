@@ -1,0 +1,20 @@
+pancakes:
+  user: one
+  title: Fluffy Pancakes
+  description: Weekend breakfast.
+  servings: 4
+  prep_minutes: 10
+  cook_minutes: 20
+
+pasta:
+  user: one
+  title: Garlic Spaghetti
+  servings: 2
+  prep_minutes: 5
+  cook_minutes: 15
+
+soup:
+  user: two
+  title: Tomato Soup
+  servings: 4
+  cook_minutes: 30

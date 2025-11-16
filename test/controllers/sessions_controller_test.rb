@@ -28,6 +28,13 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_nil cookies[:session_id]
   end
 
+  test "returns to the page that asked for sign in" do
+    get recipes_path
+    assert_redirected_to new_session_path
+
+    post session_path, params: { email_address: @user.email_address, password: "password123" }
+    assert_redirected_to recipes_url
+  end
 
   test "signed in users skip the form" do
     sign_in_as @user

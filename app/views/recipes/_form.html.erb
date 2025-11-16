@@ -1,0 +1,42 @@
+<%= form_with(model: recipe, class: "form recipe-form") do |form| %>
+  <% if recipe.errors.any? %>
+    <div class="form-errors" role="alert">
+      <p class="form-errors__title"><%= pluralize(recipe.errors.count, "problem") %> to fix before saving:</p>
+      <ul>
+        <% recipe.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title, required: true, maxlength: 150, autofocus: recipe.new_record? %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description, rows: 3, maxlength: 2000 %>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <%= form.label :servings %>
+      <%= form.number_field :servings, min: 1, max: 100, required: true %>
+    </div>
+    <div class="field">
+      <%= form.label :prep_minutes, "Prep (minutes)" %>
+      <%= form.number_field :prep_minutes, min: 0, max: 2880 %>
+    </div>
+    <div class="field">
+      <%= form.label :cook_minutes, "Cook (minutes)" %>
+      <%= form.number_field :cook_minutes, min: 0, max: 2880 %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= form.submit recipe.new_record? ? "Save recipe" : "Save changes", class: "button button--primary" %>
+    <%= link_to "Cancel", recipe.persisted? ? recipe : recipes_path, class: "button button--quiet" %>
+  </div>
+<% end %>

@@ -1,0 +1,26 @@
+<% content_for :title, "Recipes" %>
+
+<div class="page-header">
+  <h1>Recipes</h1>
+  <div class="page-header__actions">
+    <%= link_to "New recipe", new_recipe_path, class: "button button--primary" %>
+  </div>
+</div>
+
+  <% if @recipes.any? %>
+    <ul class="recipe-list">
+      <% @recipes.each do |recipe| %>
+        <li>
+          <%= link_to recipe.title, recipe %>
+          <% if recipe.total_minutes %>
+            <span class="muted"><%= duration(recipe.total_minutes) %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="empty-state">
+      <h2>No recipes yet</h2>
+      <p>Add the dishes you cook most and they'll be here when you plan the week.</p>
+    </div>
+  <% end %>

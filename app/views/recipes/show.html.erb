@@ -1,0 +1,27 @@
+<% content_for :title, @recipe.title %>
+
+<article class="recipe">
+  <header class="recipe__header">
+    <div class="recipe__heading">
+      <h1><%= @recipe.title %></h1>
+    </div>
+    <div class="recipe__actions">
+      <%= link_to "Edit", edit_recipe_path(@recipe), class: "button" %>
+      <%= button_to "Delete", @recipe, method: :delete, class: "button button--danger" %>
+    </div>
+  </header>
+
+  <% if @recipe.description.present? %>
+    <p class="recipe__description"><%= @recipe.description %></p>
+  <% end %>
+
+  <dl class="recipe__facts">
+    <div><dt>Serves</dt><dd><%= @recipe.servings %></dd></div>
+    <% if @recipe.prep_minutes %>
+      <div><dt>Prep</dt><dd><%= duration(@recipe.prep_minutes) %></dd></div>
+    <% end %>
+    <% if @recipe.cook_minutes %>
+      <div><dt>Cook</dt><dd><%= duration(@recipe.cook_minutes) %></dd></div>
+    <% end %>
+  </dl>
+</article>

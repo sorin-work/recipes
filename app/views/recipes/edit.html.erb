@@ -1,0 +1,7 @@
+<% content_for :title, "Edit #{@recipe.title}" %>
+
+<div class="page-header">
+  <h1>Edit recipe</h1>
+</div>
+
+<%= render "recipes/form", recipe: @recipe %>

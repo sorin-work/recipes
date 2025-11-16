@@ -1,7 +1,7 @@
 require "test_helper"
 
 class PasswordsControllerTest < ActionDispatch::IntegrationTest
-  setup { @user = User.take }
+  setup { @user = users(:one) }
 
   test "new" do
     get new_password_path
@@ -57,11 +57,19 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     end
 
     follow_redirect!
-    assert_notice "Passwords did not match"
+    assert_notice "doesn't match"
+  end
+
+  test "update with a password that is too short" do
+    token = @user.password_reset_token
+    put password_path(token), params: { password: "short", password_confirmation: "short" }
+
+    follow_redirect!
+    assert_notice "too short"
   end
 
   private
     def assert_notice(text)
-      assert_select "div", /#{text}/
+      assert_select ".flash", /#{text}/
     end
 end

@@ -1,7 +1,7 @@
 require "test_helper"
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
-  setup { @user = User.take }
+  setup { @user = users(:one) }
 
   test "new" do
     get new_session_path
@@ -9,10 +9,16 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create with valid credentials" do
-    post session_path, params: { email_address: @user.email_address, password: "password" }
+    post session_path, params: { email_address: @user.email_address, password: "password123" }
 
     assert_redirected_to root_path
     assert cookies[:session_id]
+  end
+
+  test "create with an email in a different case" do
+    post session_path, params: { email_address: " ONE@example.com", password: "password123" }
+
+    assert_redirected_to root_path
   end
 
   test "create with invalid credentials" do
@@ -22,8 +28,15 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_nil cookies[:session_id]
   end
 
+
+  test "signed in users skip the form" do
+    sign_in_as @user
+    get new_session_path
+    assert_redirected_to root_path
+  end
+
   test "destroy" do
-    sign_in_as(User.take)
+    sign_in_as(@user)
 
     delete session_path
 

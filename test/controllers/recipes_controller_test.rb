@@ -67,4 +67,17 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to recipes_path
   end
+
+  test "someone else's recipe is not found" do
+    get recipe_path(recipes(:soup))
+    assert_response :not_found
+
+    patch recipe_path(recipes(:soup)), params: { recipe: { title: "Mine now" } }
+    assert_response :not_found
+    assert_equal "Tomato Soup", recipes(:soup).reload.title
+
+    assert_no_difference -> { Recipe.count } do
+      delete recipe_path(recipes(:soup))
+    end
+  end
 end

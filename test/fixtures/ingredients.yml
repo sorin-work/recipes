@@ -1,0 +1,54 @@
+pancakes_flour:
+  recipe: pancakes
+  position: 1
+  quantity: 1.5
+  unit: cup
+  name: plain flour
+
+pancakes_milk:
+  recipe: pancakes
+  position: 2
+  quantity: 1.25
+  unit: cup
+  name: milk
+
+pancakes_egg:
+  recipe: pancakes
+  position: 3
+  quantity: 1
+  name: egg
+  note: beaten
+
+pancakes_salt:
+  recipe: pancakes
+  position: 4
+  name: salt
+
+pasta_spaghetti:
+  recipe: pasta
+  position: 1
+  quantity: 200
+  unit: g
+  name: spaghetti
+
+pasta_garlic:
+  recipe: pasta
+  position: 2
+  quantity: 2
+  unit: clove
+  name: garlic
+  note: sliced
+
+pasta_oil:
+  recipe: pasta
+  position: 3
+  quantity: 2
+  unit: tbsp
+  name: olive oil
+
+soup_tomatoes:
+  recipe: soup
+  position: 1
+  quantity: 1
+  unit: kg
+  name: tomatoes

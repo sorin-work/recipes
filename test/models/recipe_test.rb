@@ -21,4 +21,33 @@ class RecipeTest < ActiveSupport::TestCase
     assert_equal 30, recipes(:soup).total_minutes
     assert_nil Recipe.new.total_minutes
   end
+
+  test "ingredients come from one line each" do
+    recipe = @user.recipes.create!(title: "Toast", servings: 1, ingredients_text: "2 slices bread\n\n1 tbsp butter\n")
+
+    assert_equal [ "bread", "butter" ], recipe.ingredients.map(&:name)
+    assert_equal [ 1, 2 ], recipe.ingredients.map(&:position)
+    assert_equal "slice", recipe.ingredients.first.unit
+    assert_equal "2 slices bread\n1 tbsp butter", recipe.reload.ingredients_text
+  end
+
+  test "editing the ingredient text replaces the ingredients" do
+    recipe = recipes(:pasta)
+    recipe.update!(ingredients_text: "300 g penne")
+
+    assert_equal [ "penne" ], recipe.reload.ingredients.map(&:name)
+  end
+
+  test "leaving ingredients alone keeps them" do
+    recipe = recipes(:pasta)
+    recipe.update!(title: "Spaghetti aglio e olio")
+
+    assert_equal 3, recipe.reload.ingredients.count
+  end
+
+  test "rejects absurdly long ingredient lists" do
+    recipe = @user.recipes.new(title: "Too much", servings: 1, ingredients_text: "1 egg\n" * 101)
+    assert_not recipe.valid?
+    assert recipe.errors[:ingredients_text].any?
+  end
 end

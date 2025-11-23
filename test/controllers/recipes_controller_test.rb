@@ -34,12 +34,14 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
   test "create" do
     assert_difference -> { @user.recipes.count } do
       post recipes_path, params: { recipe: {
+        ingredients_text: "80 g oats\n300 ml milk",
         title: "Porridge", servings: 2, prep_minutes: 1, cook_minutes: 5
       } }
     end
 
     recipe = @user.recipes.order(:created_at).last
     assert_redirected_to recipe_path(recipe)
+    assert_equal [ "oats", "milk" ], recipe.ingredients.map(&:name)
   end
 
   test "create with errors re-renders the form" do
@@ -53,6 +55,7 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
   test "edit" do
     get edit_recipe_path(@recipe)
     assert_response :success
+    assert_select "textarea[name='recipe[ingredients_text]']", /cups plain flour/
   end
 
   test "update" do

@@ -41,6 +41,12 @@
     <%= form.text_area :ingredients_text, rows: 10, class: "monospace", aria: { describedby: "ingredients-hint" } %>
   </div>
 
+  <div class="field">
+    <%= form.label :steps_text, "Method" %>
+    <p class="hint" id="steps-hint">One step per line, or separate steps with a blank line.</p>
+    <%= form.text_area :steps_text, rows: 10, aria: { describedby: "steps-hint" } %>
+  </div>
+
   <div class="form-actions">
     <%= form.submit recipe.new_record? ? "Save recipe" : "Save changes", class: "button button--primary" %>
     <%= link_to "Cancel", recipe.persisted? ? recipe : recipes_path, class: "button button--quiet" %>

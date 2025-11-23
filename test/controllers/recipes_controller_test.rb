@@ -35,6 +35,7 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_difference -> { @user.recipes.count } do
       post recipes_path, params: { recipe: {
         ingredients_text: "80 g oats\n300 ml milk",
+        steps_text: "Simmer, stirring, for 5 minutes.",
         title: "Porridge", servings: 2, prep_minutes: 1, cook_minutes: 5
       } }
     end

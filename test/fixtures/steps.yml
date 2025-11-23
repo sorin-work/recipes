@@ -1,0 +1,14 @@
+pancakes_mix:
+  recipe: pancakes
+  position: 1
+  body: Whisk everything together.
+
+pancakes_cook:
+  recipe: pancakes
+  position: 2
+  body: Cook ladlefuls in a hot pan.
+
+pasta_boil:
+  recipe: pasta
+  position: 1
+  body: Boil the spaghetti and toss with garlic fried in the oil.

@@ -1,6 +1,7 @@
 class Recipe < ApplicationRecord
   belongs_to :user
   has_many :ingredients, -> { order(:position) }, dependent: :delete_all, inverse_of: :recipe
+  has_many :steps, -> { order(:position) }, dependent: :delete_all, inverse_of: :recipe
 
   normalizes :title, with: ->(title) { title.squish }
 
@@ -12,6 +13,7 @@ class Recipe < ApplicationRecord
   validate :ingredient_lines_are_reasonable
 
   before_save :rebuild_ingredients, if: -> { @ingredients_text }
+  before_save :rebuild_steps, if: -> { @steps_text }
 
 
   def total_minutes
@@ -27,6 +29,22 @@ class Recipe < ApplicationRecord
 
   def ingredients_text=(text)
     @ingredients_text = text.to_s
+  end
+
+  def steps_text
+    @steps_text || steps.map(&:body).join("\n\n")
+  end
+
+  # One step per paragraph. Single line breaks inside a paragraph start a new
+  # step too, unless the text uses blank lines between steps.
+  def steps_text=(text)
+    @steps_text = text.to_s
+  end
+
+  def step_bodies
+    text = steps_text.gsub("\r\n", "\n").strip
+    parts = text.include?("\n\n") ? text.split(/\n\s*\n/) : text.split("\n")
+    parts.map(&:squish).compact_blank
   end
 
   private
@@ -51,5 +69,12 @@ class Recipe < ApplicationRecord
         ingredients.build(quantity: line.quantity, unit: line.unit, name: line.name, note: line.note, position: position)
       end
       @ingredients_text = nil
+    end
+
+    def rebuild_steps
+      bodies = step_bodies
+      steps.delete_all
+      bodies.each.with_index(1) { |body, position| steps.build(body: body, position: position) }
+      @steps_text = nil
     end
 end

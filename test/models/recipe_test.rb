@@ -50,4 +50,12 @@ class RecipeTest < ActiveSupport::TestCase
     assert_not recipe.valid?
     assert recipe.errors[:ingredients_text].any?
   end
+
+  test "steps split on lines or blank lines" do
+    recipe = @user.recipes.create!(title: "Tea", servings: 1, steps_text: "Boil water.\nPour.\nWait.")
+    assert_equal [ "Boil water.", "Pour.", "Wait." ], recipe.steps.map(&:body)
+
+    recipe.update!(steps_text: "Boil the water\nin a kettle.\n\nPour it over the tea.")
+    assert_equal [ "Boil the water in a kettle.", "Pour it over the tea." ], recipe.reload.steps.map(&:body)
+  end
 end

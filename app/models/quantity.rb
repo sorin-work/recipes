@@ -4,7 +4,14 @@
 #   Quantity.format(1.5, Unit["cup"])  # => "1 1/2"
 #   Quantity.format(1250, Unit["g"])   # => "1250"
 module Quantity
-  NUMBER = %r{\d+\s*/\s*\d+|\d+(?:[.,]\d+)?}
+  VULGAR_FRACTIONS = {
+    "½" => 1/2r, "⅓" => 1/3r, "⅔" => 2/3r, "¼" => 1/4r, "¾" => 3/4r, "⅕" => 1/5r,
+    "⅖" => 2/5r, "⅗" => 3/5r, "⅘" => 4/5r, "⅙" => 1/6r, "⅚" => 5/6r, "⅛" => 1/8r,
+    "⅜" => 3/8r, "⅝" => 5/8r, "⅞" => 7/8r
+  }.freeze
+
+  VULGAR = "[#{VULGAR_FRACTIONS.keys.join}]".freeze
+  NUMBER = %r{\d*\s*#{VULGAR}|\d+\s*/\s*\d+|\d+(?:[.,]\d+)?}
   LEADING = /\A(#{NUMBER})(?![\d\/])\s*/
 
   FRACTIONS = [ 0, 1/8r, 1/4r, 1/3r, 3/8r, 1/2r, 5/8r, 2/3r, 3/4r, 7/8r, 1 ].freeze
@@ -25,6 +32,10 @@ module Quantity
   # Parses a single number: "2", "0.5", "1,5", "3/4", "1 1/2", "1½" or "½".
   def parse(string)
     string = string.to_s.strip
+    if (vulgar = string[/#{VULGAR}/o])
+      whole = string.delete(vulgar).strip
+      return (whole.empty? ? 0 : whole.to_i) + VULGAR_FRACTIONS[vulgar]
+    end
 
     if (fraction = string.match(%r{\A(\d+)\s*/\s*(\d+)\z}))
       return nil if fraction[2].to_i.zero?

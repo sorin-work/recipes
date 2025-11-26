@@ -15,4 +15,11 @@ class QuantityTest < ActiveSupport::TestCase
     assert_equal [ 2, "eggs" ], Quantity.scan("2 eggs")
     assert_equal [ nil, "salt to taste" ], Quantity.scan("salt to taste")
   end
+
+  test "parses unicode fractions" do
+    assert_equal 1/2r, Quantity.parse("½")
+    assert_equal 5/4r, Quantity.parse("1¼")
+    assert_equal [ 3/2r, "cups milk" ], Quantity.scan("1 ½ cups milk")
+    assert_equal [ 3/4r, "tsp salt" ], Quantity.scan("¾ tsp salt")
+  end
 end

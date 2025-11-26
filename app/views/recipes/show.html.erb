@@ -16,7 +16,6 @@
   <% end %>
 
   <dl class="recipe__facts">
-    <div><dt>Serves</dt><dd><%= @recipe.servings %></dd></div>
     <% if @recipe.prep_minutes %>
       <div><dt>Prep</dt><dd><%= duration(@recipe.prep_minutes) %></dd></div>
     <% end %>
@@ -24,4 +23,37 @@
       <div><dt>Cook</dt><dd><%= duration(@recipe.cook_minutes) %></dd></div>
     <% end %>
   </dl>
+
+  <div class="recipe__body">
+    <section class="recipe__ingredients" aria-labelledby="ingredients-heading">
+      <h2 id="ingredients-heading">Ingredients</h2>
+      <p class="muted">Serves <%= @recipe.servings %></p>
+
+      <% if @recipe.ingredients.any? %>
+        <ul class="ingredients">
+          <% @recipe.ingredients.each do |ingredient| %>
+            <li class="ingredient">
+              <%= ingredient_amount(ingredient) %>
+              <span class="ingredient__name"><%= ingredient.name %></span><% if ingredient.note.present? %><span class="ingredient__note">, <%= ingredient.note %></span><% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="muted">No ingredients yet. <%= link_to "Add some", edit_recipe_path(@recipe) %>.</p>
+      <% end %>
+    </section>
+
+    <section class="recipe__method" aria-labelledby="method-heading">
+      <h2 id="method-heading">Method</h2>
+      <% if @recipe.steps.any? %>
+        <ol class="steps">
+          <% @recipe.steps.each do |step| %>
+            <li class="step"><%= step.body %></li>
+          <% end %>
+        </ol>
+      <% else %>
+        <p class="muted">No steps yet.</p>
+      <% end %>
+    </section>
+  </div>
 </article>

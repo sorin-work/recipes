@@ -24,6 +24,8 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     get recipe_path(@recipe)
     assert_response :success
     assert_select "h1", "Fluffy Pancakes"
+    assert_select ".ingredient", 4
+    assert_select ".step", 2
   end
 
   test "new" do

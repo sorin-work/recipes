@@ -27,4 +27,23 @@ class QuantityTest < ActiveSupport::TestCase
     assert_equal 3/2r, Quantity.parse("1 1/2")
     assert_equal [ 9/4r, "cups flour" ], Quantity.scan("2 1/4 cups flour")
   end
+
+  test "formats cups and spoons as fractions" do
+    assert_equal "1 1/2", Quantity.format(1.5, Unit["cup"])
+    assert_equal "1/3", Quantity.format(1/3r, Unit["cup"])
+    assert_equal "2/3", Quantity.format(0.667, Unit["cup"])
+    assert_equal "3", Quantity.format(3, Unit["tbsp"])
+    assert_equal "1/2", Quantity.format(0.5, nil)
+  end
+
+  test "formats metric amounts as decimals" do
+    assert_equal "250", Quantity.format(250, Unit["g"])
+    assert_equal "1.25", Quantity.format(1.25, Unit["kg"])
+    assert_equal "12.5", Quantity.format(12.5, Unit["ml"])
+    assert_equal "333", Quantity.format(1000/3r, Unit["g"])
+  end
+
+  test "falls back to decimals when no kitchen fraction is close" do
+    assert_equal "0.43", Quantity.format(0.43, Unit["cup"])
+  end
 end

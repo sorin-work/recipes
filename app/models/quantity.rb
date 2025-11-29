@@ -16,6 +16,7 @@ module Quantity
   LEADING = /\A(#{NUMBER})(?![\d\/])\s*/
 
   FRACTIONS = [ 0, 1/8r, 1/4r, 1/3r, 3/8r, 1/2r, 5/8r, 2/3r, 3/4r, 7/8r, 1 ].freeze
+  FRACTION_TOLERANCE = 0.03
 
   module_function
 
@@ -52,10 +53,31 @@ module Quantity
     end
   end
 
-  def format(value, _unit = nil)
+  # Cups, spoons and counted things read best as fractions ("1 1/2 cups", "1/2
+  # onion"); grams and millilitres as plain numbers ("250 g").
+  def style_for(unit)
+    unit&.metric? ? :decimal : :fraction
+  end
+
+  def format(value, unit = nil)
     return "" if value.nil?
 
-    decimal(value)
+    style_for(unit) == :decimal ? decimal(value) : fraction(value)
+  end
+
+  # 1.5 => "1 1/2", 0.333 => "1/3", 2 => "2". Falls back to a decimal when the
+  # value is not close to a common kitchen fraction.
+  def fraction(value)
+    value = value.to_r
+    whole = value.floor
+    rest = value - whole
+    nearest = FRACTIONS.min_by { |f| (rest - f).abs }
+    return decimal(value) if (rest - nearest).abs > FRACTION_TOLERANCE
+
+    return whole.to_s if nearest.zero?
+
+    part = "#{nearest.numerator}/#{nearest.denominator}"
+    whole.zero? ? part : "#{whole} #{part}"
   end
 
   # Two decimals under 10, one under 100, whole numbers above that.

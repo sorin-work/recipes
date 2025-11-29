@@ -22,4 +22,9 @@ class QuantityTest < ActiveSupport::TestCase
     assert_equal [ 3/2r, "cups milk" ], Quantity.scan("1 ½ cups milk")
     assert_equal [ 3/4r, "tsp salt" ], Quantity.scan("¾ tsp salt")
   end
+
+  test "reads mixed numbers as one quantity" do
+    assert_equal 3/2r, Quantity.parse("1 1/2")
+    assert_equal [ 9/4r, "cups flour" ], Quantity.scan("2 1/4 cups flour")
+  end
 end

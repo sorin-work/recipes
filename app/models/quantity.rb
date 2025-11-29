@@ -11,7 +11,8 @@ module Quantity
   }.freeze
 
   VULGAR = "[#{VULGAR_FRACTIONS.keys.join}]".freeze
-  NUMBER = %r{\d*\s*#{VULGAR}|\d+\s*/\s*\d+|\d+(?:[.,]\d+)?}
+  # Order matters: try "1 1/2" before "1", and "1½" before "1".
+  NUMBER = %r{\d+\s+\d+\s*/\s*\d+|\d*\s*#{VULGAR}|\d+\s*/\s*\d+|\d+(?:[.,]\d+)?}
   LEADING = /\A(#{NUMBER})(?![\d\/])\s*/
 
   FRACTIONS = [ 0, 1/8r, 1/4r, 1/3r, 3/8r, 1/2r, 5/8r, 2/3r, 3/4r, 7/8r, 1 ].freeze
@@ -35,6 +36,11 @@ module Quantity
     if (vulgar = string[/#{VULGAR}/o])
       whole = string.delete(vulgar).strip
       return (whole.empty? ? 0 : whole.to_i) + VULGAR_FRACTIONS[vulgar]
+    end
+    if (mixed = string.match(%r{\A(\d+)\s+(\d+)\s*/\s*(\d+)\z}))
+      return nil if mixed[3].to_i.zero?
+
+      return mixed[1].to_i + Rational(mixed[2].to_i, mixed[3].to_i)
     end
 
     if (fraction = string.match(%r{\A(\d+)\s*/\s*(\d+)\z}))

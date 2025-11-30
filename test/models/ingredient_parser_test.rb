@@ -64,4 +64,10 @@ class IngredientParserTest < ActiveSupport::TestCase
   test "blank lines are skipped" do
     assert_nil parse("   ")
   end
+
+  test "a capital T is a tablespoon and a small t a teaspoon" do
+    assert_equal "tbsp", parse("1 T sugar").unit
+    assert_equal "tsp", parse("1 t salt").unit
+    assert_equal "sugar", parse("1 T sugar").name
+  end
 end

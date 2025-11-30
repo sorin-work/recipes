@@ -44,6 +44,9 @@ class IngredientParser
 
         return [ Unit.find(name), rest.sub(/\A\.?/, "").strip ]
       end
+      Unit::CASE_SENSITIVE.each_key do |letter|
+        return [ Unit.find(letter), text[1..].strip ] if text.match?(/\A#{letter}(?:\.|\s)/)
+      end
       [ nil, text ]
     end
 

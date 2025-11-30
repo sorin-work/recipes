@@ -1,0 +1,12 @@
+<li class="card recipe-card" id="<%= dom_id(recipe, :card) %>">
+  <%= link_to recipe, class: "recipe-card__link" do %>
+    <div class="recipe-card__photo recipe-card__photo--empty" aria-hidden="true"><%= recipe.title.first.upcase %></div>
+    <h2 class="recipe-card__title"><%= recipe.title %></h2>
+  <% end %>
+  <div class="recipe-card__meta">
+    <% if recipe.total_minutes %>
+      <span><%= duration(recipe.total_minutes) %></span>
+    <% end %>
+    <span><%= pluralize(recipe.servings, "serving") %></span>
+  </div>
+</li>

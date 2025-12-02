@@ -86,4 +86,9 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
       delete recipe_path(recipes(:soup))
     end
   end
+
+  test "tags from the form" do
+    patch recipe_path(@recipe), params: { recipe: { tag_list: "breakfast, weekend" } }
+    assert_equal [ "breakfast", "weekend" ], @recipe.reload.tags.map(&:name)
+  end
 end

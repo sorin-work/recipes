@@ -1,0 +1,11 @@
+pancakes_breakfast:
+  recipe: pancakes
+  tag: breakfast
+
+pasta_quick:
+  recipe: pasta
+  tag: quick
+
+soup_dinner:
+  recipe: soup
+  tag: dinner

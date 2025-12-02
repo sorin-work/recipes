@@ -2,6 +2,8 @@ class Recipe < ApplicationRecord
   belongs_to :user
   has_many :ingredients, -> { order(:position) }, dependent: :delete_all, inverse_of: :recipe
   has_many :steps, -> { order(:position) }, dependent: :delete_all, inverse_of: :recipe
+  has_many :taggings, dependent: :delete_all
+  has_many :tags, -> { order(:name) }, through: :taggings
 
   normalizes :title, with: ->(title) { title.squish }
 
@@ -14,6 +16,7 @@ class Recipe < ApplicationRecord
 
   before_save :rebuild_ingredients, if: -> { @ingredients_text }
   before_save :rebuild_steps, if: -> { @steps_text }
+  before_save :assign_tags, if: -> { @tag_list }
 
 
   def total_minutes
@@ -47,6 +50,14 @@ class Recipe < ApplicationRecord
     parts.map(&:squish).compact_blank
   end
 
+  def tag_list
+    @tag_list || tags.map(&:name).join(", ")
+  end
+
+  def tag_list=(list)
+    @tag_list = list.to_s
+  end
+
   private
     def parsed_ingredient_lines
       @parsed_ingredient_lines ||= @ingredients_text.to_s.lines.filter_map { |line| IngredientParser.parse(line) }
@@ -76,5 +87,11 @@ class Recipe < ApplicationRecord
       steps.delete_all
       bodies.each.with_index(1) { |body, position| steps.build(body: body, position: position) }
       @steps_text = nil
+    end
+
+    def assign_tags
+      names = @tag_list.split(",").map { |name| Tag.normalize_name(name) }.compact_blank.uniq.first(20)
+      self.tags = names.map { |name| user.tags.find_or_create_by!(name: name) }
+      @tag_list = nil
     end
 end

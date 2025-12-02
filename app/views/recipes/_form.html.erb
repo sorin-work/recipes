@@ -47,6 +47,12 @@
     <%= form.text_area :steps_text, rows: 10, aria: { describedby: "steps-hint" } %>
   </div>
 
+  <div class="field">
+    <%= form.label :tag_list, "Tags" %>
+    <p class="hint" id="tags-hint">Separate with commas, e.g. <code>quick, vegetarian, pasta</code>.</p>
+    <%= form.text_field :tag_list, aria: { describedby: "tags-hint" } %>
+  </div>
+
   <div class="form-actions">
     <%= form.submit recipe.new_record? ? "Save recipe" : "Save changes", class: "button button--primary" %>
     <%= link_to "Cancel", recipe.persisted? ? recipe : recipes_path, class: "button button--quiet" %>

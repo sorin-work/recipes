@@ -47,6 +47,7 @@ class RecipesController < ApplicationController
       params.expect(recipe: [
         :ingredients_text,
         :steps_text,
+        :tag_list,
         :title, :description, :servings, :prep_minutes, :cook_minutes
       ])
     end

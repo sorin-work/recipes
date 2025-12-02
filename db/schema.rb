@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_23_170755) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_02_210647) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,6 +56,25 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_23_170755) do
     t.index ["recipe_id"], name: "index_steps_on_recipe_id"
   end
 
+  create_table "taggings", force: :cascade do |t|
+    t.bigint "recipe_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["recipe_id", "tag_id"], name: "index_taggings_on_recipe_id_and_tag_id", unique: true
+    t.index ["recipe_id"], name: "index_taggings_on_recipe_id"
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "name"], name: "index_tags_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_tags_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email_address", null: false
     t.string "password_digest", null: false
@@ -69,4 +88,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_23_170755) do
   add_foreign_key "recipes", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "steps", "recipes"
+  add_foreign_key "taggings", "recipes"
+  add_foreign_key "taggings", "tags"
+  add_foreign_key "tags", "users"
 end

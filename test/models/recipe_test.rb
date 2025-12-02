@@ -58,4 +58,11 @@ class RecipeTest < ActiveSupport::TestCase
     recipe.update!(steps_text: "Boil the water\nin a kettle.\n\nPour it over the tea.")
     assert_equal [ "Boil the water in a kettle.", "Pour it over the tea." ], recipe.reload.steps.map(&:body)
   end
+
+  test "tags come from a comma separated list" do
+    recipe = @user.recipes.create!(title: "Salad", servings: 2, tag_list: "quick, summer ,, quick")
+
+    assert_equal [ "quick", "summer" ], recipe.tags.map(&:name).sort
+    assert_equal tags(:quick), recipe.tags.find_by(name: "quick"), "reuses the existing tag"
+  end
 end

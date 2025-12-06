@@ -23,7 +23,11 @@ class Recipe < ApplicationRecord
     words = query.to_s.split.first(5)
     words.reduce(all) do |scope, word|
       pattern = "%#{word}%"
-      scope.where("recipes.title ILIKE :pattern OR recipes.description ILIKE :pattern", pattern: pattern)
+      scope.where(
+        "recipes.title ILIKE :pattern OR recipes.description ILIKE :pattern OR EXISTS (" \
+        "SELECT 1 FROM ingredients WHERE ingredients.recipe_id = recipes.id AND ingredients.name ILIKE :pattern)",
+        pattern: pattern
+      )
     end
   }
 

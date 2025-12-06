@@ -72,6 +72,12 @@ class RecipeTest < ActiveSupport::TestCase
     assert_empty @user.recipes.search("tomato")
   end
 
+  test "search matches ingredient names, every word has to match" do
+    assert_equal [ recipes(:pancakes) ], @user.recipes.search("flour").to_a
+    assert_equal [ recipes(:pancakes) ], @user.recipes.search("FLUFFY milk").to_a
+    assert_empty @user.recipes.search("fluffy garlic")
+  end
+
   test "tagged" do
     assert_equal [ recipes(:pancakes) ], @user.recipes.tagged("breakfast").to_a
   end

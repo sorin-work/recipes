@@ -2,7 +2,10 @@ class RecipesController < ApplicationController
   before_action :set_recipe, only: %i[ show edit update destroy ]
 
   def index
-    @recipes = Current.user.recipes.order(created_at: :desc)
+    scope = Current.user.recipes.order(created_at: :desc)
+    scope = scope.search(params[:q]) if params[:q].present?
+    scope = scope.tagged(params[:tag]) if params[:tag].present?
+    @recipes = scope
     @tags = Current.user.tags.order(:name)
   end
 

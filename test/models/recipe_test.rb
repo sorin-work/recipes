@@ -66,6 +66,12 @@ class RecipeTest < ActiveSupport::TestCase
     assert_equal tags(:quick), recipe.tags.find_by(name: "quick"), "reuses the existing tag"
   end
 
+  test "search matches titles and descriptions" do
+    assert_equal [ recipes(:pasta) ], @user.recipes.search("spaghetti").to_a
+    assert_equal [ recipes(:pancakes) ], @user.recipes.search("weekend").to_a
+    assert_empty @user.recipes.search("tomato")
+  end
+
   test "tagged" do
     assert_equal [ recipes(:pancakes) ], @user.recipes.tagged("breakfast").to_a
   end

@@ -87,6 +87,17 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "search" do
+    get recipes_path(q: "spaghetti")
+    assert_select ".recipe-card__title", text: "Garlic Spaghetti"
+    assert_select ".recipe-card__title", text: "Fluffy Pancakes", count: 0
+  end
+
+  test "search with no matches" do
+    get recipes_path(q: "durian")
+    assert_select "h2", "Nothing matches"
+  end
+
   test "filter by tag" do
     get recipes_path(tag: "breakfast")
     assert_select ".recipe-card__title", count: 1, text: "Fluffy Pancakes"

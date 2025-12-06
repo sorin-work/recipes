@@ -7,10 +7,30 @@
   </div>
 </div>
 
+<%= form_with url: recipes_path, method: :get, class: "filters", role: "search" do |form| %>
+  <div class="filters__search">
+    <%= form.label :q, "Search recipes", class: "visually-hidden" %>
+    <%= form.search_field :q, value: params[:q], placeholder: "Search by name or ingredient" %>
+  </div>
+  <% if @tags.any? %>
+    <div class="filters__field">
+      <%= form.label :tag, "Tag", class: "visually-hidden" %>
+      <%= form.select :tag, options_from_collection_for_select(@tags, :name, :name, params[:tag]),
+            include_blank: "All tags" %>
+    </div>
+  <% end %>
+  <%= form.submit "Search", class: "button", name: nil %>
+<% end %>
+
   <% if @recipes.any? %>
     <ul class="card-grid">
       <%= render partial: "recipes/card", collection: @recipes, as: :recipe %>
     </ul>
+  <% elsif params[:q].present? || params[:tag].present? || params[:favourites] == "1" %>
+    <div class="empty-state">
+      <h2>Nothing matches</h2>
+      <p>Try fewer words or <%= link_to "clear the filters", recipes_path, data: { turbo_frame: "_top" } %>.</p>
+    </div>
   <% else %>
     <div class="empty-state">
       <h2>No recipes yet</h2>

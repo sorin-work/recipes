@@ -142,5 +142,20 @@ a.tag:hover {
 
 
 
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.filters__search {
+  flex: 1 1 18rem;
+}
+
+.filters__field select {
+  width: auto;
+}
 
 

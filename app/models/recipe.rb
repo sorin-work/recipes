@@ -19,6 +19,13 @@ class Recipe < ApplicationRecord
   before_save :assign_tags, if: -> { @tag_list }
 
   scope :tagged, ->(name) { joins(:tags).where(tags: { name: Tag.normalize_name(name) }) }
+  scope :search, ->(query) {
+    words = query.to_s.split.first(5)
+    words.reduce(all) do |scope, word|
+      pattern = "%#{word}%"
+      scope.where("recipes.title ILIKE :pattern OR recipes.description ILIKE :pattern", pattern: pattern)
+    end
+  }
 
   def total_minutes
     return if prep_minutes.nil? && cook_minutes.nil?

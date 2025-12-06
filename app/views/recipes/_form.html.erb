@@ -50,7 +50,12 @@
   <div class="field">
     <%= form.label :tag_list, "Tags" %>
     <p class="hint" id="tags-hint">Separate with commas, e.g. <code>quick, vegetarian, pasta</code>.</p>
-    <%= form.text_field :tag_list, aria: { describedby: "tags-hint" } %>
+    <%= form.text_field :tag_list, aria: { describedby: "tags-hint" }, list: "tag-suggestions" %>
+    <datalist id="tag-suggestions">
+      <% Current.user.tags.order(:name).each do |tag| %>
+        <option value="<%= tag.name %>"></option>
+      <% end %>
+    </datalist>
   </div>
 
   <div class="form-actions">

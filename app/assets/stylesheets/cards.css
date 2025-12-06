@@ -62,4 +62,8 @@
   color: var(--color-text-muted);
 }
 
+.recipe-card .tag-list {
+  padding: var(--space-2) var(--space-4) var(--space-3);
+  margin: 0;
+}
 

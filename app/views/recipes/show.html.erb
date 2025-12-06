@@ -24,6 +24,14 @@
     <% end %>
   </dl>
 
+  <% if @recipe.tags.any? %>
+    <ul class="tag-list">
+      <% @recipe.tags.each do |tag| %>
+        <li class="tag"><%= tag.name %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
   <div class="recipe__body">
     <section class="recipe__ingredients" aria-labelledby="ingredients-heading">
       <h2 id="ingredients-heading">Ingredients</h2>

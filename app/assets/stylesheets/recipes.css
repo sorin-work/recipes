@@ -117,6 +117,28 @@
 
 
 
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-3);
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.15em 0.65em;
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+a.tag:hover {
+  color: var(--color-text);
+}
 
 
 

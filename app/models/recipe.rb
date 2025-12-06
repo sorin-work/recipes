@@ -18,6 +18,7 @@ class Recipe < ApplicationRecord
   before_save :rebuild_steps, if: -> { @steps_text }
   before_save :assign_tags, if: -> { @tag_list }
 
+  scope :tagged, ->(name) { joins(:tags).where(tags: { name: Tag.normalize_name(name) }) }
 
   def total_minutes
     return if prep_minutes.nil? && cook_minutes.nil?

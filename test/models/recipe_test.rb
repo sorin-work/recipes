@@ -65,4 +65,8 @@ class RecipeTest < ActiveSupport::TestCase
     assert_equal [ "quick", "summer" ], recipe.tags.map(&:name).sort
     assert_equal tags(:quick), recipe.tags.find_by(name: "quick"), "reuses the existing tag"
   end
+
+  test "tagged" do
+    assert_equal [ recipes(:pancakes) ], @user.recipes.tagged("breakfast").to_a
+  end
 end

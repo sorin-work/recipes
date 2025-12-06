@@ -3,6 +3,7 @@ class RecipesController < ApplicationController
 
   def index
     @recipes = Current.user.recipes.order(created_at: :desc)
+    @tags = Current.user.tags.order(:name)
   end
 
   def show

@@ -12,7 +12,7 @@
   <% if recipe.tags.any? %>
     <ul class="tag-list">
       <% recipe.tags.each do |tag| %>
-        <li class="tag"><%= tag.name %></li>
+        <li><%= link_to tag.name, recipes_path(tag: tag.name), class: "tag" %></li>
       <% end %>
     </ul>
   <% end %>

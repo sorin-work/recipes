@@ -78,6 +78,11 @@ class RecipeTest < ActiveSupport::TestCase
     assert_empty @user.recipes.search("fluffy garlic")
   end
 
+  test "search treats % and _ literally" do
+    assert_empty @user.recipes.search("%").to_a
+    assert_empty @user.recipes.search("_").to_a
+  end
+
   test "tagged" do
     assert_equal [ recipes(:pancakes) ], @user.recipes.tagged("breakfast").to_a
   end

@@ -22,7 +22,7 @@ class Recipe < ApplicationRecord
   scope :search, ->(query) {
     words = query.to_s.split.first(5)
     words.reduce(all) do |scope, word|
-      pattern = "%#{word}%"
+      pattern = "%#{sanitize_sql_like(word)}%"
       scope.where(
         "recipes.title ILIKE :pattern OR recipes.description ILIKE :pattern OR EXISTS (" \
         "SELECT 1 FROM ingredients WHERE ingredients.recipe_id = recipes.id AND ingredients.name ILIKE :pattern)",

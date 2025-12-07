@@ -85,5 +85,6 @@ class RecipeTest < ActiveSupport::TestCase
 
   test "tagged" do
     assert_equal [ recipes(:pancakes) ], @user.recipes.tagged("breakfast").to_a
+    assert_equal [ recipes(:pancakes) ], @user.recipes.tagged("Breakfast ").to_a
   end
 end

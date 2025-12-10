@@ -1,0 +1,13 @@
+<%= tag.div id: dom_id(recipe, :favourite), class: "favourite" do %>
+  <% if recipe.favourite? %>
+    <%= button_to recipe_favourite_path(recipe), method: :delete, class: "favourite__button is-on",
+          title: "Remove from favourites", aria: { pressed: true, label: "Remove #{recipe.title} from favourites" } do %>
+      <span aria-hidden="true">★</span>
+    <% end %>
+  <% else %>
+    <%= button_to recipe_favourite_path(recipe), class: "favourite__button",
+          title: "Add to favourites", aria: { pressed: false, label: "Add #{recipe.title} to favourites" } do %>
+      <span aria-hidden="true">☆</span>
+    <% end %>
+  <% end %>
+<% end %>

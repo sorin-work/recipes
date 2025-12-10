@@ -5,6 +5,7 @@ pancakes:
   servings: 4
   prep_minutes: 10
   cook_minutes: 20
+  favourite: true
 
 pasta:
   user: one

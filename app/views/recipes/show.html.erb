@@ -4,6 +4,7 @@
   <header class="recipe__header">
     <div class="recipe__heading">
       <h1><%= @recipe.title %></h1>
+      <%= render "recipes/favourite_button", recipe: @recipe %>
     </div>
     <div class="recipe__actions">
       <%= link_to "Edit", edit_recipe_path(@recipe), class: "button" %>

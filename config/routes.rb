@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   resources :recipes do
+    resource :favourite, only: %i[ create destroy ], module: :recipes
   end
 
   root "recipes#index"

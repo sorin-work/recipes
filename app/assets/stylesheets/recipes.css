@@ -140,6 +140,24 @@ a.tag:hover {
   color: var(--color-text);
 }
 
+.favourite form {
+  margin: 0;
+}
+
+.favourite__button {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: var(--space-1);
+}
+
+.favourite__button.is-on,
+.favourite__button:hover {
+  color: var(--color-star);
+}
 
 
 .filters {

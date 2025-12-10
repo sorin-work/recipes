@@ -18,6 +18,7 @@ class Recipe < ApplicationRecord
   before_save :rebuild_steps, if: -> { @steps_text }
   before_save :assign_tags, if: -> { @tag_list }
 
+  scope :favourites, -> { where(favourite: true) }
   scope :tagged, ->(name) { joins(:tags).where(tags: { name: Tag.normalize_name(name) }) }
   scope :search, ->(query) {
     words = query.to_s.split.first(5)

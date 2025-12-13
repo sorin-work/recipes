@@ -17,6 +17,13 @@ class Recipes::FavouritesController < ApplicationController
     end
 
     def respond
-      redirect_to @recipe
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            helpers.dom_id(@recipe, :favourite), partial: "recipes/favourite_button", locals: { recipe: @recipe }
+          )
+        end
+        format.html { redirect_back_or_to @recipe }
+      end
     end
 end

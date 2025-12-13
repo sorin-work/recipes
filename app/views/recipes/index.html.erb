@@ -7,10 +7,13 @@
   </div>
 </div>
 
-<%= form_with url: recipes_path, method: :get, class: "filters", role: "search" do |form| %>
+<%= form_with url: recipes_path, method: :get, class: "filters", role: "search",
+      data: { controller: "autosubmit", action: "change->autosubmit#submit",
+              turbo_frame: "recipe-results", turbo_action: "advance" } do |form| %>
   <div class="filters__search">
     <%= form.label :q, "Search recipes", class: "visually-hidden" %>
-    <%= form.search_field :q, value: params[:q], placeholder: "Search by name or ingredient" %>
+    <%= form.search_field :q, value: params[:q], placeholder: "Search by name or ingredient",
+          autocomplete: "off", data: { action: "input->autosubmit#submitLater" } %>
   </div>
   <% if @tags.any? %>
     <div class="filters__field">
@@ -23,9 +26,10 @@
     <%= form.check_box :favourites, { checked: params[:favourites] == "1" }, "1", nil %>
     Favourites only
   </label>
-  <%= form.submit "Search", class: "button", name: nil %>
+  <noscript><%= form.submit "Search", class: "button", name: nil %></noscript>
 <% end %>
 
+<%= turbo_frame_tag "recipe-results", target: "_top" do %>
   <% if @recipes.any? %>
     <ul class="card-grid">
       <%= render partial: "recipes/card", collection: @recipes, as: :recipe %>
@@ -41,3 +45,4 @@
       <p>Add the dishes you cook most and they'll be here when you plan the week.</p>
     </div>
   <% end %>
+<% end %>

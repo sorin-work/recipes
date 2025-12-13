@@ -19,6 +19,10 @@
             include_blank: "All tags" %>
     </div>
   <% end %>
+  <label class="checkbox filters__field">
+    <%= form.check_box :favourites, { checked: params[:favourites] == "1" }, "1", nil %>
+    Favourites only
+  </label>
   <%= form.submit "Search", class: "button", name: nil %>
 <% end %>
 

@@ -103,6 +103,11 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".recipe-card__title", count: 1, text: "Fluffy Pancakes"
   end
 
+  test "favourites only" do
+    get recipes_path(favourites: "1")
+    assert_select ".recipe-card__title", count: 1, text: "Fluffy Pancakes"
+  end
+
   test "tags from the form" do
     patch recipe_path(@recipe), params: { recipe: { tag_list: "breakfast, weekend" } }
     assert_equal [ "breakfast", "weekend" ], @recipe.reload.tags.map(&:name)

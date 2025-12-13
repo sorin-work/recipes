@@ -5,6 +5,7 @@ class RecipesController < ApplicationController
     scope = Current.user.recipes.order(created_at: :desc)
     scope = scope.search(params[:q]) if params[:q].present?
     scope = scope.tagged(params[:tag]) if params[:tag].present?
+    scope = scope.favourites if params[:favourites] == "1"
     @recipes = scope
     @tags = Current.user.tags.order(:name)
   end

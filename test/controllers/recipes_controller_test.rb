@@ -108,6 +108,12 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".recipe-card__title", count: 1, text: "Fluffy Pancakes"
   end
 
+  test "upload a photo" do
+    patch recipe_path(@recipe), params: { recipe: { photo: fixture_file_upload("photo.png", "image/png") } }
+    assert_redirected_to recipe_path(@recipe)
+    assert @recipe.reload.photo.attached?
+  end
+
   test "tags from the form" do
     patch recipe_path(@recipe), params: { recipe: { tag_list: "breakfast, weekend" } }
     assert_equal [ "breakfast", "weekend" ], @recipe.reload.tags.map(&:name)

@@ -4,6 +4,7 @@ class Recipe < ApplicationRecord
   has_many :steps, -> { order(:position) }, dependent: :delete_all, inverse_of: :recipe
   has_many :taggings, dependent: :delete_all
   has_many :tags, -> { order(:name) }, through: :taggings
+  has_one_attached :photo
 
   normalizes :title, with: ->(title) { title.squish }
 

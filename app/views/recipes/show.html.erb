@@ -12,6 +12,10 @@
     </div>
   </header>
 
+  <% if @recipe.photo.attached? %>
+    <%= image_tag @recipe.photo, alt: @recipe.title, class: "recipe__photo" %>
+  <% end %>
+
   <% if @recipe.description.present? %>
     <p class="recipe__description"><%= @recipe.description %></p>
   <% end %>

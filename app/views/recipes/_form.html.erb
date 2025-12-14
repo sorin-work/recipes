@@ -58,6 +58,12 @@
     </datalist>
   </div>
 
+  <div class="field">
+    <%= form.label :photo %>
+    <%= form.file_field :photo, accept: "image/jpeg,image/png,image/webp,image/gif" %>
+    <p class="hint">JPEG, PNG, WebP or GIF up to 5 MB.</p>
+  </div>
+
   <div class="form-actions">
     <%= form.submit recipe.new_record? ? "Save recipe" : "Save changes", class: "button button--primary" %>
     <%= link_to "Cancel", recipe.persisted? ? recipe : recipes_path, class: "button button--quiet" %>

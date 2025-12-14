@@ -53,6 +53,7 @@ class RecipesController < ApplicationController
         :ingredients_text,
         :steps_text,
         :tag_list,
+        :photo,
         :title, :description, :servings, :prep_minutes, :cook_minutes
       ])
     end

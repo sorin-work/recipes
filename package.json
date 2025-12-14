@@ -1,0 +1,12 @@
+{
+  "name": "recipes",
+  "private": true,
+  "type": "module",
+  "description": "Unit tests for the browser code in app/javascript. There are no npm dependencies: the app loads its JavaScript through importmap-rails.",
+  "scripts": {
+    "test": "node --test \"test/javascript/**/*.test.js\""
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

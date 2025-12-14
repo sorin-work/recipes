@@ -87,4 +87,14 @@ class RecipeTest < ActiveSupport::TestCase
     assert_equal [ recipes(:pancakes) ], @user.recipes.tagged("breakfast").to_a
     assert_equal [ recipes(:pancakes) ], @user.recipes.tagged("Breakfast ").to_a
   end
+
+  test "photo must be a small image" do
+    recipe = recipes(:pasta)
+    recipe.photo.attach(io: StringIO.new("not an image"), filename: "notes.txt", content_type: "text/plain")
+    assert_not recipe.valid?
+    assert_includes recipe.errors[:photo], "must be a JPEG, PNG, WebP or GIF image"
+
+    recipe.photo.attach(io: file_fixture("photo.png").open, filename: "photo.png", content_type: "image/png")
+    assert recipe.valid?
+  end
 end

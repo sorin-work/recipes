@@ -6,6 +6,9 @@ class Recipe < ApplicationRecord
   has_many :tags, -> { order(:name) }, through: :taggings
   has_one_attached :photo
 
+  PHOTO_TYPES = %w[image/jpeg image/png image/webp image/gif].freeze
+  PHOTO_MAX_SIZE = 5.megabytes
+
   normalizes :title, with: ->(title) { title.squish }
 
   validates :title, presence: true, length: { maximum: 150 }
@@ -13,6 +16,7 @@ class Recipe < ApplicationRecord
   validates :prep_minutes, :cook_minutes,
     numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2880 }, allow_nil: true
   validates :description, length: { maximum: 2000 }
+  validate :photo_is_an_acceptable_image
   validate :ingredient_lines_are_reasonable
 
   before_save :rebuild_ingredients, if: -> { @ingredients_text }
@@ -107,5 +111,15 @@ class Recipe < ApplicationRecord
       names = @tag_list.split(",").map { |name| Tag.normalize_name(name) }.compact_blank.uniq.first(20)
       self.tags = names.map { |name| user.tags.find_or_create_by!(name: name) }
       @tag_list = nil
+    end
+
+    def photo_is_an_acceptable_image
+      return unless photo.attached?
+
+      if PHOTO_TYPES.exclude?(photo.blob.content_type)
+        errors.add(:photo, "must be a JPEG, PNG, WebP or GIF image")
+      elsif photo.blob.byte_size > PHOTO_MAX_SIZE
+        errors.add(:photo, "must be smaller than 5 MB")
+      end
     end
 end

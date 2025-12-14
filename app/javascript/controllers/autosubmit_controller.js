@@ -7,6 +7,7 @@ export default class extends Controller {
 
   connect() {
     this.submitLater = debounce(() => this.submit(), this.delayValue)
+    this.submitted = this.serialize()
   }
 
   disconnect() {
@@ -14,6 +15,15 @@ export default class extends Controller {
   }
 
   submit() {
+    // The search box fires "change" again when it loses focus, e.g. when a result
+    // is clicked. Submitting the same search again would cancel that click.
+    const data = this.serialize()
+    if (data === this.submitted) return
+    this.submitted = data
     this.element.requestSubmit()
+  }
+
+  serialize() {
+    return new URLSearchParams(new FormData(this.element)).toString()
   }
 }

@@ -4,7 +4,10 @@ class Recipe < ApplicationRecord
   has_many :steps, -> { order(:position) }, dependent: :delete_all, inverse_of: :recipe
   has_many :taggings, dependent: :delete_all
   has_many :tags, -> { order(:name) }, through: :taggings
-  has_one_attached :photo
+  has_one_attached :photo do |attachable|
+    attachable.variant :card, resize_to_fill: [ 640, 420 ], preprocessed: false
+    attachable.variant :large, resize_to_limit: [ 1200, 900 ], preprocessed: false
+  end
 
   PHOTO_TYPES = %w[image/jpeg image/png image/webp image/gif].freeze
   PHOTO_MAX_SIZE = 5.megabytes

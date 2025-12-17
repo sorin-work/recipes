@@ -1,7 +1,7 @@
 <li class="card recipe-card" id="<%= dom_id(recipe, :card) %>">
   <%= link_to recipe, class: "recipe-card__link" do %>
     <% if recipe.photo.attached? %>
-      <%= image_tag recipe.photo, alt: "", class: "recipe-card__photo", loading: "lazy" %>
+      <%= image_tag recipe.photo.variant(:card), alt: "", class: "recipe-card__photo", loading: "lazy" %>
     <% else %>
       <div class="recipe-card__photo recipe-card__photo--empty" aria-hidden="true"><%= recipe.title.first.upcase %></div>
     <% end %>

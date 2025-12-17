@@ -166,6 +166,19 @@ a.tag:hover {
   color: var(--color-star);
 }
 
+.photo-current {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.photo-current__image {
+  width: 8rem;
+  height: 5.5rem;
+  object-fit: cover;
+  border-radius: var(--radius-small);
+}
 
 .filters {
   display: flex;

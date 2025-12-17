@@ -31,6 +31,7 @@ class RecipesController < ApplicationController
   end
 
   def update
+    @recipe.photo.purge_later if params.dig(:recipe, :remove_photo) == "1"
     if @recipe.update(recipe_params)
       redirect_to @recipe, notice: "Recipe updated."
     else

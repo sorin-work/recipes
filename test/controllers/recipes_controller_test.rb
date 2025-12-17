@@ -114,6 +114,15 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert @recipe.reload.photo.attached?
   end
 
+  test "remove the photo" do
+    @recipe.photo.attach(io: file_fixture("photo.png").open, filename: "photo.png", content_type: "image/png")
+
+    perform_enqueued_jobs do
+      patch recipe_path(@recipe), params: { recipe: { title: @recipe.title, remove_photo: "1" } }
+    end
+    assert_not @recipe.reload.photo.attached?
+  end
+
   test "tags from the form" do
     patch recipe_path(@recipe), params: { recipe: { tag_list: "breakfast, weekend" } }
     assert_equal [ "breakfast", "weekend" ], @recipe.reload.tags.map(&:name)

@@ -60,6 +60,14 @@
 
   <div class="field">
     <%= form.label :photo %>
+    <% if recipe.photo.attached? && recipe.persisted? %>
+      <div class="photo-current">
+        <%= image_tag recipe.photo, alt: "", class: "photo-current__image" %>
+        <label class="checkbox">
+          <%= check_box_tag "recipe[remove_photo]", "1", false, id: "recipe_remove_photo" %> Remove this photo
+        </label>
+      </div>
+    <% end %>
     <%= form.file_field :photo, accept: "image/jpeg,image/png,image/webp,image/gif" %>
     <p class="hint">JPEG, PNG, WebP or GIF up to 5 MB.</p>
   </div>

@@ -38,12 +38,18 @@
   <% end %>
 
   <div class="recipe__body">
-    <section class="recipe__ingredients" aria-labelledby="ingredients-heading">
+    <section class="recipe__ingredients" aria-labelledby="ingredients-heading"
+             data-controller="scale" data-scale-base-value="<%= @recipe.servings %>">
       <h2 id="ingredients-heading">Ingredients</h2>
       <%= form_with url: recipe_path(@recipe), method: :get, class: "servings" do |form| %>
         <%= form.label :servings, "Servings" %>
-        <%= form.number_field :servings, value: @servings, min: 1, max: 100, class: "servings__input" %>
-        <%= form.submit "Scale", class: "button button--small", name: nil %>
+        <div class="stepper">
+          <button type="button" class="stepper__button" data-action="scale#decrement" aria-label="Fewer servings">−</button>
+          <%= form.number_field :servings, value: @servings, min: 1, max: 100, class: "servings__input",
+                data: { scale_target: "input", action: "input->scale#update" } %>
+          <button type="button" class="stepper__button" data-action="scale#increment" aria-label="More servings">+</button>
+        </div>
+        <noscript><%= form.submit "Scale", class: "button button--small", name: nil %></noscript>
       <% end %>
 
       <% if @recipe.ingredients.any? %>

@@ -5,6 +5,12 @@ module RecipesHelper
     return if ingredient.quantity.nil?
 
     unit = ingredient.unit_object
-    tag.span(ingredient.amount(scale), class: "ingredient__amount")
+    tag.span(class: "ingredient__amount", data: {
+      scale_target: "amount",
+      quantity: ingredient.quantity.to_f,
+      unit: unit&.singular,
+      unit_plural: unit&.plural,
+      style: Quantity.style_for(unit)
+    }) { ingredient.amount(scale) }
   end
 end

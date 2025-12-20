@@ -40,13 +40,17 @@
   <div class="recipe__body">
     <section class="recipe__ingredients" aria-labelledby="ingredients-heading">
       <h2 id="ingredients-heading">Ingredients</h2>
-      <p class="muted">Serves <%= @recipe.servings %></p>
+      <%= form_with url: recipe_path(@recipe), method: :get, class: "servings" do |form| %>
+        <%= form.label :servings, "Servings" %>
+        <%= form.number_field :servings, value: @servings, min: 1, max: 100, class: "servings__input" %>
+        <%= form.submit "Scale", class: "button button--small", name: nil %>
+      <% end %>
 
       <% if @recipe.ingredients.any? %>
         <ul class="ingredients">
           <% @recipe.ingredients.each do |ingredient| %>
             <li class="ingredient">
-              <%= ingredient_amount(ingredient) %>
+              <%= ingredient_amount(ingredient, @scale) %>
               <span class="ingredient__name"><%= ingredient.name %></span><% if ingredient.note.present? %><span class="ingredient__note">, <%= ingredient.note %></span><% end %>
             </li>
           <% end %>

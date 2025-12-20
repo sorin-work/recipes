@@ -79,6 +79,14 @@ class Recipe < ApplicationRecord
     @tag_list = list.to_s
   end
 
+  # Factor to multiply quantities by to make +servings+ portions.
+  def scale_for(servings)
+    servings = servings.to_i
+    return 1 if servings <= 0 || servings == self.servings
+
+    Rational(servings, self.servings)
+  end
+
   private
     def parsed_ingredient_lines
       @parsed_ingredient_lines ||= @ingredients_text.to_s.lines.filter_map { |line| IngredientParser.parse(line) }

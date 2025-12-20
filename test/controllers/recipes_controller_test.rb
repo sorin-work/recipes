@@ -108,6 +108,17 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".recipe-card__title", count: 1, text: "Fluffy Pancakes"
   end
 
+  test "show scaled to more servings" do
+    get recipe_path(@recipe, servings: 8)
+    assert_select ".ingredient__amount", text: "3 cups"
+    assert_select "input[name=servings][value='8']"
+  end
+
+  test "ignores silly servings" do
+    get recipe_path(@recipe, servings: 5000)
+    assert_select "input[name=servings][value='4']"
+  end
+
   test "upload a photo" do
     patch recipe_path(@recipe), params: { recipe: { photo: fixture_file_upload("photo.png", "image/png") } }
     assert_redirected_to recipe_path(@recipe)

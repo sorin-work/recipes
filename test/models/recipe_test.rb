@@ -88,6 +88,14 @@ class RecipeTest < ActiveSupport::TestCase
     assert_equal [ recipes(:pancakes) ], @user.recipes.tagged("Breakfast ").to_a
   end
 
+  test "scale_for" do
+    recipe = recipes(:pancakes)
+    assert_equal 1, recipe.scale_for(4)
+    assert_equal 2, recipe.scale_for(8)
+    assert_equal 1/4r, recipe.scale_for(1)
+    assert_equal 1, recipe.scale_for(0)
+  end
+
   test "photo must be a small image" do
     recipe = recipes(:pasta)
     recipe.photo.attach(io: StringIO.new("not an image"), filename: "notes.txt", content_type: "text/plain")

@@ -12,6 +12,7 @@ export default class extends Controller {
       const { quantity, style, unit, unitPlural } = amount.dataset
       amount.textContent = formatAmount(Number(quantity) * factor, { style, unit, unitPlural })
     }
+    this.updateUrl()
   }
 
   increment() {
@@ -26,5 +27,14 @@ export default class extends Controller {
     const current = Number(this.inputTarget.value) || this.baseValue
     this.inputTarget.value = current + by
     this.update()
+  }
+
+  // Keep ?servings= in the address bar so a reload or a shared link keeps the scale.
+  updateUrl() {
+    const url = new URL(window.location.href)
+    const servings = Number(this.inputTarget.value)
+    if (servings === this.baseValue || !servings) url.searchParams.delete("servings")
+    else url.searchParams.set("servings", servings)
+    window.history.replaceState(window.history.state, "", url)
   }
 }

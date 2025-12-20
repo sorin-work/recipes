@@ -74,6 +74,11 @@ module Quantity
     nearest = FRACTIONS.min_by { |f| (rest - f).abs }
     return decimal(value) if (rest - nearest).abs > FRACTION_TOLERANCE
 
+    # 0.999 after scaling a third back up is a whole number, not "1/1".
+    if nearest == 1
+      whole += 1
+      nearest = 0
+    end
     return whole.to_s if nearest.zero?
 
     part = "#{nearest.numerator}/#{nearest.denominator}"

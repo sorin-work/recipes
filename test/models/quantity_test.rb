@@ -46,4 +46,9 @@ class QuantityTest < ActiveSupport::TestCase
   test "falls back to decimals when no kitchen fraction is close" do
     assert_equal "0.43", Quantity.format(0.43, Unit["cup"])
   end
+
+  test "values just under a whole number round up instead of showing 1/1" do
+    assert_equal "1", Quantity.format(0.999, Unit["cup"])
+    assert_equal "3", Quantity.format(2.98, nil)
+  end
 end

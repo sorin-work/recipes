@@ -1,0 +1,9 @@
+require "test_helper"
+
+class RecipesHelperTest < ActionView::TestCase
+  test "ingredient amounts carry what the browser needs to rescale them" do
+    html = ingredient_amount(ingredients(:pancakes_flour), 2)
+    assert_dom_equal %(<span class="ingredient__amount" data-scale-target="amount" data-quantity="1.5" data-unit="cup" data-unit-plural="cups" data-style="fraction">3 cups</span>),
+      html
+  end
+end

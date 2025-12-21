@@ -25,7 +25,7 @@ export default class extends Controller {
 
   step(by) {
     const current = Number(this.inputTarget.value) || this.baseValue
-    this.inputTarget.value = current + by
+    this.inputTarget.value = Math.min(100, Math.max(1, current + by))
     this.update()
   }
 

@@ -87,6 +87,14 @@ class Recipe < ApplicationRecord
     Rational(servings, self.servings)
   end
 
+  def duplicate
+    copy = dup
+    copy.title = "#{title} (copy)"
+    copy.ingredients_text = ingredients_text
+    copy.steps_text = steps_text
+    copy
+  end
+
   private
     def parsed_ingredient_lines
       @parsed_ingredient_lines ||= @ingredients_text.to_s.lines.filter_map { |line| IngredientParser.parse(line) }

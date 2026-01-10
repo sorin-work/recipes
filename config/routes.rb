@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   resources :recipes do
     resource :favourite, only: %i[ create destroy ], module: :recipes
+    resource :duplicate, only: %i[ create ], module: :recipes
   end
 
   root "recipes#index"

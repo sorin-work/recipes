@@ -96,6 +96,15 @@ class RecipeTest < ActiveSupport::TestCase
     assert_equal 1, recipe.scale_for(0)
   end
 
+  test "duplicate copies the recipe with its ingredients and steps" do
+    copy = recipes(:pancakes).duplicate
+    copy.save!
+
+    assert_equal "Fluffy Pancakes (copy)", copy.title
+    assert_equal recipes(:pancakes).ingredients.map(&:to_line), copy.ingredients.map(&:to_line)
+    assert_equal 2, copy.steps.count
+  end
+
   test "photo must be a small image" do
     recipe = recipes(:pasta)
     recipe.photo.attach(io: StringIO.new("not an image"), filename: "notes.txt", content_type: "text/plain")

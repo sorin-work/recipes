@@ -88,6 +88,12 @@ class RecipeTest < ActiveSupport::TestCase
     assert_equal [ recipes(:pancakes) ], @user.recipes.tagged("Breakfast ").to_a
   end
 
+  test "sorted" do
+    assert_equal [ recipes(:pancakes), recipes(:pasta) ], @user.recipes.sorted("title").to_a
+    assert_equal [ recipes(:pasta), recipes(:pancakes) ], @user.recipes.sorted("quickest").to_a
+    assert_equal @user.recipes.order(created_at: :desc).to_a, @user.recipes.sorted("nonsense").to_a
+  end
+
   test "scale_for" do
     recipe = recipes(:pancakes)
     assert_equal 1, recipe.scale_for(4)

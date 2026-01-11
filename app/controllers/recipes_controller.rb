@@ -2,7 +2,8 @@ class RecipesController < ApplicationController
   before_action :set_recipe, only: %i[ show edit update destroy ]
 
   def index
-    scope = Current.user.recipes.order(created_at: :desc)
+    @sort = Recipe::SORTS.key?(params[:sort]) ? params[:sort] : "newest"
+    scope = Current.user.recipes.sorted(@sort)
     scope = scope.search(params[:q]) if params[:q].present?
     scope = scope.tagged(params[:tag]) if params[:tag].present?
     scope = scope.favourites if params[:favourites] == "1"

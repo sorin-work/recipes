@@ -12,6 +12,12 @@ class Recipe < ApplicationRecord
   PHOTO_TYPES = %w[image/jpeg image/png image/webp image/gif].freeze
   PHOTO_MAX_SIZE = 5.megabytes
 
+  SORTS = {
+    "newest" => { created_at: :desc },
+    "title" => { title: :asc },
+    "quickest" => Arel.sql("COALESCE(prep_minutes, 0) + COALESCE(cook_minutes, 0) ASC, title ASC")
+  }.freeze
+
   normalizes :title, with: ->(title) { title.squish }
 
   validates :title, presence: true, length: { maximum: 150 }
@@ -39,6 +45,7 @@ class Recipe < ApplicationRecord
       )
     end
   }
+  scope :sorted, ->(key) { order(SORTS.fetch(key.to_s, SORTS["newest"])) }
 
   def total_minutes
     return if prep_minutes.nil? && cook_minutes.nil?

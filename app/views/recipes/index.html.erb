@@ -26,6 +26,11 @@
     <%= form.check_box :favourites, { checked: params[:favourites] == "1" }, "1", nil %>
     Favourites only
   </label>
+  <div class="filters__field">
+    <%= form.label :sort, "Sort by", class: "visually-hidden" %>
+    <%= form.select :sort, [ [ "Newest first", "newest" ], [ "A to Z", "title" ], [ "Quickest first", "quickest" ] ],
+          selected: @sort %>
+  </div>
   <noscript><%= form.submit "Search", class: "button", name: nil %></noscript>
 <% end %>
 

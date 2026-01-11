@@ -87,11 +87,15 @@ class Recipe < ApplicationRecord
     Rational(servings, self.servings)
   end
 
+  # An unsaved copy with the same ingredients, steps, tags and photo.
   def duplicate
     copy = dup
-    copy.title = "#{title} (copy)"
+    copy.title = "#{title} (copy)".truncate(150)
+    copy.favourite = false
     copy.ingredients_text = ingredients_text
     copy.steps_text = steps_text
+    copy.tag_list = tag_list
+    copy.photo.attach(photo.blob) if photo.attached?
     copy
   end
 

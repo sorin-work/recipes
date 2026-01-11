@@ -105,6 +105,14 @@ class RecipeTest < ActiveSupport::TestCase
     assert_equal 2, copy.steps.count
   end
 
+  test "duplicate copies tags too but is not a favourite" do
+    copy = recipes(:pancakes).duplicate
+    copy.save!
+
+    assert_equal [ "breakfast" ], copy.tags.map(&:name)
+    assert_not copy.favourite?
+  end
+
   test "photo must be a small image" do
     recipe = recipes(:pasta)
     recipe.photo.attach(io: StringIO.new("not an image"), filename: "notes.txt", content_type: "text/plain")

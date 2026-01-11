@@ -39,6 +39,7 @@
     <ul class="card-grid">
       <%= render partial: "recipes/card", collection: @recipes, as: :recipe %>
     </ul>
+    <%= render "recipes/pagination", page: @page, total: @total %>
   <% elsif params[:q].present? || params[:tag].present? || params[:favourites] == "1" %>
     <div class="empty-state">
       <h2>Nothing matches</h2>

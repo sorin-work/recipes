@@ -7,7 +7,9 @@ class RecipesController < ApplicationController
     scope = scope.search(params[:q]) if params[:q].present?
     scope = scope.tagged(params[:tag]) if params[:tag].present?
     scope = scope.favourites if params[:favourites] == "1"
-    @recipes = scope
+    @total = scope.count
+    @page = [ params[:page].to_i, 1 ].max
+    @recipes = scope.limit(Recipe::PER_PAGE).offset((@page - 1) * Recipe::PER_PAGE)
     @tags = Current.user.tags.order(:name)
   end
 

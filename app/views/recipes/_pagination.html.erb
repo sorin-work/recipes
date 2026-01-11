@@ -1,0 +1,12 @@
+<% pages = (total.to_f / Recipe::PER_PAGE).ceil %>
+<% if pages > 1 %>
+  <nav class="pagination" aria-label="Pages">
+    <% if page > 1 %>
+      <%= link_to "← Newer", recipes_path(recipe_list_params(page: page - 1)), class: "button button--quiet", rel: "prev" %>
+    <% end %>
+    <span class="pagination__status">Page <%= page %> of <%= pages %></span>
+    <% if page < pages %>
+      <%= link_to "Older →", recipes_path(recipe_list_params(page: page + 1)), class: "button button--quiet", rel: "next" %>
+    <% end %>
+  </nav>
+<% end %>

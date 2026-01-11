@@ -13,4 +13,9 @@ module RecipesHelper
       style: Quantity.style_for(unit)
     }) { ingredient.amount(scale) }
   end
+
+  # Query params for the current list, with +changes+ applied.
+  def recipe_list_params(**changes)
+    { page: changes[:page] }.compact
+  end
 end

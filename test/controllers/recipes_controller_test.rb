@@ -108,6 +108,17 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".recipe-card__title", count: 1, text: "Fluffy Pancakes"
   end
 
+  test "pages" do
+    30.times { |i| @user.recipes.create!(title: "Recipe #{i}", servings: 2) }
+
+    get recipes_path(q: "recipe")
+    assert_select ".recipe-card", Recipe::PER_PAGE
+    assert_select ".pagination__status", "Page 1 of 2"
+
+    get recipes_path(q: "recipe", page: 2)
+    assert_select ".recipe-card", 30 - Recipe::PER_PAGE
+  end
+
   test "show scaled to more servings" do
     get recipe_path(@recipe, servings: 8)
     assert_select ".ingredient__amount", text: "3 cups"

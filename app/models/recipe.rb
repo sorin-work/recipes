@@ -9,6 +9,8 @@ class Recipe < ApplicationRecord
     attachable.variant :large, resize_to_limit: [ 1200, 900 ], preprocessed: false
   end
 
+  PER_PAGE = 24
+
   PHOTO_TYPES = %w[image/jpeg image/png image/webp image/gif].freeze
   PHOTO_MAX_SIZE = 5.megabytes
 

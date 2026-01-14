@@ -16,6 +16,6 @@ module RecipesHelper
 
   # Query params for the current list, with +changes+ applied.
   def recipe_list_params(**changes)
-    { page: changes[:page] }.compact
+    request.query_parameters.symbolize_keys.slice(:q, :tag, :favourites, :sort, :page).merge(changes).compact_blank
   end
 end

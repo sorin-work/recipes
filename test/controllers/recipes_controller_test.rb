@@ -119,6 +119,14 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".recipe-card", 30 - Recipe::PER_PAGE
   end
 
+  test "a page past the end shows the last page" do
+    30.times { |i| @user.recipes.create!(title: "Recipe #{i}", servings: 2) }
+
+    get recipes_path(page: 99)
+    assert_select ".pagination__status", "Page 2 of 2"
+    assert_select ".recipe-card", 32 - Recipe::PER_PAGE
+  end
+
   test "page links keep the search" do
     30.times { |i| @user.recipes.create!(title: "Recipe #{i}", servings: 2) }
 

@@ -8,7 +8,8 @@ class RecipesController < ApplicationController
     scope = scope.tagged(params[:tag]) if params[:tag].present?
     scope = scope.favourites if params[:favourites] == "1"
     @total = scope.count
-    @page = [ params[:page].to_i, 1 ].max
+    # A page past the end (after deleting recipes, or an old link) shows the last page.
+    @page = params[:page].to_i.clamp(1, [ (@total.to_f / Recipe::PER_PAGE).ceil, 1 ].max)
     @recipes = scope.limit(Recipe::PER_PAGE).offset((@page - 1) * Recipe::PER_PAGE)
     @tags = Current.user.tags.order(:name)
   end

@@ -1,0 +1,84 @@
+# Turns a recipe pasted from a web page, an email or a note into recipe
+# attributes. Nothing is saved: the result fills in the new recipe form so it
+# can be checked before saving.
+#
+# The text is read top to bottom. The first line is the title, lines under an
+# "Ingredients" heading are ingredients and lines under "Method", "Directions",
+# "Instructions" or "Steps" are steps. Lines like "Serves 4" or "Prep time: 15
+# mins" anywhere are picked up as details.
+class RecipeImport
+  include ActiveModel::Model
+  include ActiveModel::Attributes
+
+
+  INGREDIENTS_HEADING = /\A(?:ingredients?|you(?:'ll| will) need|shopping list)\s*:?\z/i
+  STEPS_HEADING = /\A(?:method|directions?|instructions?|steps?|preparation|how to make(?: it)?)\s*:?\z/i
+  STEP_NUMBER = /\A(?:\d+\.|[-*•])\s*/
+
+  attribute :text, :string
+
+  validates :text, presence: { message: "is empty - paste a recipe first" }
+  validate :looks_like_a_recipe
+
+  # Attributes for Recipe.new.
+  def recipe_attributes
+    parsed.slice(:title, :description, :servings, :prep_minutes, :cook_minutes, :source_url, :tag_list)
+      .merge(ingredients_text: parsed[:ingredients].join("\n"), steps_text: parsed[:steps].join("\n\n"))
+      .compact_blank
+  end
+
+  def parsed
+    @parsed ||= parse
+  end
+
+  private
+    def lines
+      text.to_s.split("\n").map(&:strip)
+    end
+
+    def parse
+      result = { title: nil, description: [], ingredients: [], steps: [] }
+      section = :intro
+
+      lines.each do |line|
+        next if line.empty?
+
+        if line.match?(INGREDIENTS_HEADING)
+          section = :ingredients
+        elsif line.match?(STEPS_HEADING)
+          section = :steps
+        elsif result[:title].nil?
+          result[:title] = line.delete_suffix(":").truncate(150)
+        else
+          add_line(result, section, line)
+        end
+      end
+      result[:description] = result[:description].join(" ").truncate(2000).presence
+      result
+    end
+
+    def add_line(result, section, line)
+      case section
+      when :intro then result[:description] << line
+      when :ingredients then result[:ingredients] << line.sub(/\A[-*•·]\s*/, "")
+      when :steps then add_step(result, line)
+      end
+    end
+
+    def add_step(result, line)
+      body = line.sub(STEP_NUMBER, "").strip
+      return if body.empty?
+
+      result[:steps] << body
+    end
+
+    def looks_like_a_recipe
+      return if text.blank? || errors.any?
+
+      if parsed[:title].blank?
+        errors.add(:text, "doesn't have a title on its first line")
+      elsif parsed[:ingredients].empty? && parsed[:steps].empty?
+        errors.add(:text, "doesn't have any ingredients or steps we could find")
+      end
+    end
+end

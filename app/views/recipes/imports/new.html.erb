@@ -1,0 +1,32 @@
+<% content_for :title, "Paste a recipe" %>
+
+<div class="page-header">
+  <h1>Paste a recipe</h1>
+</div>
+
+<div class="import">
+  <%= form_with model: @import, url: recipe_import_path, scope: :recipe_import, class: "form" do |form| %>
+    <% if @import.errors.any? %>
+      <div class="form-errors" role="alert">
+        <ul>
+          <% @import.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="field">
+      <%= form.label :text, "Recipe text" %>
+      <p class="hint" id="import-hint">
+        Copy a recipe from a website, an email or your notes and paste it here. Put the title on the first line.
+        Headings like <strong>Ingredients</strong> and <strong>Method</strong> help, but aren't required.
+      </p>
+      <%= form.text_area :text, rows: 18, required: true, autofocus: true, aria: { describedby: "import-hint" } %>
+    </div>
+    <div class="form-actions">
+      <%= form.submit "Read recipe", class: "button button--primary" %>
+      <%= link_to "Cancel", recipes_path, class: "button button--quiet" %>
+    </div>
+  <% end %>
+
+</div>

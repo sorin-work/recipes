@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   resources :recipes do
+    collection do
+      resource :import, only: %i[ new create ], module: :recipes, as: :recipe_import
+    end
     resource :favourite, only: %i[ create destroy ], module: :recipes
     resource :duplicate, only: %i[ create ], module: :recipes
   end

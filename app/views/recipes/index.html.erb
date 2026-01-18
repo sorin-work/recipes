@@ -3,6 +3,7 @@
 <div class="page-header">
   <h1>Recipes</h1>
   <div class="page-header__actions">
+    <%= link_to "Paste a recipe", new_recipe_import_path, class: "button" %>
     <%= link_to "New recipe", new_recipe_path, class: "button button--primary" %>
   </div>
 </div>
@@ -50,6 +51,7 @@
     <div class="empty-state">
       <h2>No recipes yet</h2>
       <p>Add the dishes you cook most and they'll be here when you plan the week.</p>
+      <p>Already have one written down somewhere? <%= link_to "Paste it in", new_recipe_import_path, data: { turbo_frame: "_top" } %>.</p>
     </div>
   <% end %>
 <% end %>

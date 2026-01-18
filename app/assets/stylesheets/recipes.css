@@ -235,3 +235,21 @@ a.tag:hover {
   margin-top: var(--space-5);
 }
 
+.import {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.import__example pre {
+  white-space: pre-wrap;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .import {
+    grid-template-columns: 1fr;
+  }
+}

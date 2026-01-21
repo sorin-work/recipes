@@ -52,4 +52,36 @@ class RecipeImportTest < ActiveSupport::TestCase
     assert_not result.valid?
     assert_includes result.errors[:text], "doesn't have any ingredients or steps we could find"
   end
+
+  test "picks up servings and times" do
+    attributes = import(<<~TEXT).recipe_attributes
+      Banana Bread
+      Serves: 10
+      Prep time: 15 mins
+      Cook time: 1 hr
+      Total time: 1 hr 15 mins
+
+      Ingredients
+      3 bananas
+
+      Method
+      Mash and bake.
+    TEXT
+
+    assert_equal 10, attributes[:servings]
+    assert_equal 15, attributes[:prep_minutes]
+    assert_equal 60, attributes[:cook_minutes]
+    assert_nil attributes[:description]
+  end
+
+  test "steps that start like a time stay steps" do
+    attributes = import("Cake\nIngredients\n1 egg\nMethod\nBake for 30 minutes.\nCooking time depends on your oven.").recipe_attributes
+    assert_equal "Bake for 30 minutes.\n\nCooking time depends on your oven.", attributes[:steps_text]
+    assert_nil attributes[:cook_minutes]
+  end
+
+  test "yield and makes count as servings" do
+    assert_equal 12, import("Muffins\nMakes 12 muffins\nIngredients\n1 egg").recipe_attributes[:servings]
+    assert_equal 4, import("Stew\nYield: 4 servings\nIngredients\n1 egg").recipe_attributes[:servings]
+  end
 end

@@ -13,6 +13,11 @@ class RecipeImport
 
   INGREDIENTS_HEADING = /\A(?:ingredients?|you(?:'ll| will) need|shopping list)\s*:?\z/i
   STEPS_HEADING = /\A(?:method|directions?|instructions?|steps?|preparation|how to make(?: it)?)\s*:?\z/i
+  SERVINGS = /\A(?:serves|servings|yield|yields|makes|portions)\s*:?\s*(\d+)/i
+  # "Prep: 10 mins" or "Prep time 10 mins", but not a step like "Bake for 30 minutes".
+  PREP_TIME = /\Aprep(?:aration)?(?:\s+time\s*:?|\s*:)\s*(.+)\z/i
+  COOK_TIME = /\A(?:cook(?:ing)?|bake|baking)(?:\s+time\s*:?|\s*:)\s*(.+)\z/i
+  TOTAL_TIME = /\Atotal(?:\s+time\s*:?|\s*:)\s*(.+)\z/i
   STEP_NUMBER = /\A(?:\d+\.|[-*•])\s*/
 
   attribute :text, :string
@@ -47,6 +52,8 @@ class RecipeImport
           section = :ingredients
         elsif line.match?(STEPS_HEADING)
           section = :steps
+        elsif detail?(line, result)
+          next
         elsif result[:title].nil?
           result[:title] = line.delete_suffix(":").truncate(150)
         else
@@ -70,6 +77,20 @@ class RecipeImport
       return if body.empty?
 
       result[:steps] << body
+    end
+
+    def detail?(line, result)
+      if (match = line.match(SERVINGS))
+        result[:servings] ||= match[1].to_i.clamp(1, 100)
+      elsif (match = line.match(PREP_TIME))
+        result[:prep_minutes] ||= DurationParser.minutes(match[1])
+      elsif (match = line.match(COOK_TIME))
+        result[:cook_minutes] ||= DurationParser.minutes(match[1])
+      elsif line.match?(TOTAL_TIME)
+        true
+      else
+        false
+      end
     end
 
     def looks_like_a_recipe

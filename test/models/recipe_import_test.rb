@@ -84,4 +84,9 @@ class RecipeImportTest < ActiveSupport::TestCase
     assert_equal 12, import("Muffins\nMakes 12 muffins\nIngredients\n1 egg").recipe_attributes[:servings]
     assert_equal 4, import("Stew\nYield: 4 servings\nIngredients\n1 egg").recipe_attributes[:servings]
   end
+
+  test "strips step numbers in their usual forms" do
+    attributes = import("Tea\nSteps\n1) Boil water.\nStep 2: Pour.\nStep 3\nWait 3 minutes.\n4 - Drink.").recipe_attributes
+    assert_equal "Boil water.\n\nPour.\n\nWait 3 minutes.\n\nDrink.", attributes[:steps_text]
+  end
 end

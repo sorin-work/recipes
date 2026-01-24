@@ -96,4 +96,10 @@ class RecipeImportTest < ActiveSupport::TestCase
     assert_equal "1 tea bag", attributes[:ingredients_text]
     assert_equal "Brew.", attributes[:steps_text]
   end
+
+  test "keeps a source link" do
+    attributes = import("Tea\nhttps://example.com/tea\nIngredients\n1 tea bag").recipe_attributes
+    assert_equal "https://example.com/tea", attributes[:source_url]
+    assert_nil attributes[:description]
+  end
 end

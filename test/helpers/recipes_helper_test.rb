@@ -6,4 +6,10 @@ class RecipesHelperTest < ActionView::TestCase
     assert_dom_equal %(<span class="ingredient__amount" data-scale-target="amount" data-quantity="1.5" data-unit="cup" data-unit-plural="cups" data-style="fraction">3 cups</span>),
       html
   end
+
+  test "source link shows the site name" do
+    recipe = Recipe.new(source_url: "https://www.example.com/recipes/42")
+    assert_dom_equal %(<a rel="noopener noreferrer nofollow" target="_blank" href="https://www.example.com/recipes/42">example.com</a>),
+      source_link(recipe)
+  end
 end

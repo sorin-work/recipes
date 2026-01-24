@@ -59,6 +59,11 @@
   </div>
 
   <div class="field">
+    <%= form.label :source_url, "Source link" %>
+    <%= form.url_field :source_url, placeholder: "https://", maxlength: 2000 %>
+  </div>
+
+  <div class="field">
     <%= form.label :photo %>
     <% if recipe.photo.attached? && recipe.persisted? %>
       <div class="photo-current">

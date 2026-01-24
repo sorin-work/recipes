@@ -18,6 +18,7 @@ class RecipeImport
   PREP_TIME = /\Aprep(?:aration)?(?:\s+time\s*:?|\s*:)\s*(.+)\z/i
   COOK_TIME = /\A(?:cook(?:ing)?|bake|baking)(?:\s+time\s*:?|\s*:)\s*(.+)\z/i
   TOTAL_TIME = /\Atotal(?:\s+time\s*:?|\s*:)\s*(.+)\z/i
+  URL = %r{\A(?:source\s*:\s*)?(https?://\S+)\z}i
   STEP_NUMBER = /\A(?:step\s*\d+\s*[:.)-]?|\d+\s*[.)-]|[-*•])\s*/i
 
   attribute :text, :string
@@ -88,6 +89,8 @@ class RecipeImport
         result[:cook_minutes] ||= DurationParser.minutes(match[1])
       elsif line.match?(TOTAL_TIME)
         true
+      elsif (match = line.match(URL))
+        result[:source_url] ||= match[1]
       else
         false
       end

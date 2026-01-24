@@ -28,6 +28,9 @@
     <% if @recipe.cook_minutes %>
       <div><dt>Cook</dt><dd><%= duration(@recipe.cook_minutes) %></dd></div>
     <% end %>
+    <% if @recipe.source_url.present? %>
+      <div><dt>From</dt><dd><%= source_link(@recipe) %></dd></div>
+    <% end %>
   </dl>
 
   <% if @recipe.tags.any? %>

@@ -21,12 +21,14 @@ class Recipe < ApplicationRecord
   }.freeze
 
   normalizes :title, with: ->(title) { title.squish }
+  normalizes :source_url, with: ->(url) { url.strip.presence }
 
   validates :title, presence: true, length: { maximum: 150 }
   validates :servings, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 100 }
   validates :prep_minutes, :cook_minutes,
     numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2880 }, allow_nil: true
   validates :description, length: { maximum: 2000 }
+  validates :source_url, length: { maximum: 2000 }
   validate :photo_is_an_acceptable_image
   validate :ingredient_lines_are_reasonable
 

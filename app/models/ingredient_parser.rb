@@ -9,6 +9,8 @@ class IngredientParser
   end
 
   BULLET = /\A(?:[-*•·–]|\d+[.)](?=\s))\s*/
+  # "1 (400 g) can tomatoes": the bracket describes the can, it isn't the amount.
+  PACKAGE_SIZE = /\A\(([^)]*)\)\s*/
 
   def self.parse(line)
     new(line).parse
@@ -24,6 +26,10 @@ class IngredientParser
 
     quantity, rest = Quantity.scan(text)
     notes = []
+    if quantity && (size = rest.match(PACKAGE_SIZE))
+      notes << size[1].strip
+      rest = size.post_match
+    end
 
     unit, rest = take_unit(rest) if quantity
     rest = rest.sub(/\Aof\s+/i, "")

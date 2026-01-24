@@ -65,6 +65,14 @@ class IngredientParserTest < ActiveSupport::TestCase
     assert_nil parse("   ")
   end
 
+  test "package sizes in brackets go in the note" do
+    result = parse("1 (400 g) can chopped tomatoes")
+    assert_equal 1, result.quantity
+    assert_equal "can", result.unit
+    assert_equal "chopped tomatoes", result.name
+    assert_equal "400 g", result.note
+  end
+
   test "a capital T is a tablespoon and a small t a teaspoon" do
     assert_equal "tbsp", parse("1 T sugar").unit
     assert_equal "tsp", parse("1 t salt").unit

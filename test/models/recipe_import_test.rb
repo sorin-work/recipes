@@ -89,4 +89,11 @@ class RecipeImportTest < ActiveSupport::TestCase
     attributes = import("Tea\nSteps\n1) Boil water.\nStep 2: Pour.\nStep 3\nWait 3 minutes.\n4 - Drink.").recipe_attributes
     assert_equal "Boil water.\n\nPour.\n\nWait 3 minutes.\n\nDrink.", attributes[:steps_text]
   end
+
+  test "copes with windows line endings and non-breaking spaces" do
+    attributes = import("Tea\r\nIngredients \r\n1 tea bag\r\nMethod\r\nBrew.\r\n").recipe_attributes
+    assert_equal "Tea", attributes[:title]
+    assert_equal "1 tea bag", attributes[:ingredients_text]
+    assert_equal "Brew.", attributes[:steps_text]
+  end
 end

@@ -38,7 +38,7 @@ class RecipeImport
 
   private
     def lines
-      text.to_s.split("\n").map(&:strip)
+      text.to_s.gsub(/\r\n?/, "\n").split("\n").map { |line| line.gsub(/[[:space:]]+/, " ").strip }
     end
 
     def parse

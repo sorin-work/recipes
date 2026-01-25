@@ -61,6 +61,8 @@ class RecipeImport
           add_line(result, section, line)
         end
       end
+
+      guess_sections(result) if result[:ingredients].empty? && result[:steps].empty?
       result[:description] = result[:description].join(" ").truncate(2000).presence
       result
     end
@@ -94,6 +96,25 @@ class RecipeImport
       else
         false
       end
+    end
+
+    # Without headings: the lines that start with an amount right after the
+    # title are the ingredients and everything after them is the method.
+    def guess_sections(result)
+      intro = result[:description]
+      first = intro.index { |line| ingredient_like?(line) }
+      return unless first
+
+      rest = intro[first..]
+      last = rest.index { |line| !ingredient_like?(line) } || rest.size
+      result[:description] = intro[0...first]
+      result[:ingredients] = rest[0...last].map { |line| line.sub(/\A[-*•·]\s*/, "") }
+      rest[last..].each { |line| add_step(result, line) }
+    end
+
+    def ingredient_like?(line)
+      line = line.sub(/\A[-*•·]\s*/, "")
+      Quantity.scan(line).first.present? && line.length < 120
     end
 
     def looks_like_a_recipe

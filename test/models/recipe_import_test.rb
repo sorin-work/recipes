@@ -102,4 +102,19 @@ class RecipeImportTest < ActiveSupport::TestCase
     assert_equal "https://example.com/tea", attributes[:source_url]
     assert_nil attributes[:description]
   end
+
+  test "guesses the sections when there are no headings" do
+    attributes = import(<<~TEXT).recipe_attributes
+      Scrambled Eggs
+      Creamy and soft.
+      3 eggs
+      1 tbsp butter
+      Whisk the eggs.
+      Cook slowly in the butter, stirring.
+    TEXT
+
+    assert_equal "Creamy and soft.", attributes[:description]
+    assert_equal "3 eggs\n1 tbsp butter", attributes[:ingredients_text]
+    assert_equal "Whisk the eggs.\n\nCook slowly in the butter, stirring.", attributes[:steps_text]
+  end
 end

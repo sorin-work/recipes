@@ -13,7 +13,8 @@ module Quantity
   VULGAR = "[#{VULGAR_FRACTIONS.keys.join}]".freeze
   # Order matters: try "1 1/2" before "1", and "1½" before "1".
   NUMBER = %r{\d+\s+\d+\s*/\s*\d+|\d*\s*#{VULGAR}|\d+\s*/\s*\d+|\d+(?:[.,]\d+)?}
-  LEADING = /\A(#{NUMBER})(?![\d\/])\s*/
+  RANGE = /(#{NUMBER})\s*(?:-|–|—|to)\s*(#{NUMBER})/
+  LEADING = /\A(?:#{RANGE}|(#{NUMBER}))(?![\d\/])\s*/
 
   FRACTIONS = [ 0, 1/8r, 1/4r, 1/3r, 3/8r, 1/2r, 5/8r, 2/3r, 3/4r, 7/8r, 1 ].freeze
   FRACTION_TOLERANCE = 0.03
@@ -22,12 +23,13 @@ module Quantity
 
   # Pulls a quantity off the front of +text+. Returns [quantity, rest], with a nil
   # quantity when the text does not start with a number.
+  # For a range like "2-3" the larger number wins: it is what you need to buy.
   def scan(text)
     text = text.to_s.strip
     match = LEADING.match(text)
     return [ nil, text ] unless match
 
-    value = parse(match[1])
+    value = match[3] ? parse(match[3]) : [ parse(match[1]), parse(match[2]) ].max
     [ value, match.post_match ]
   end
 

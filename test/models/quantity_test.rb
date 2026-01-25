@@ -28,6 +28,12 @@ class QuantityTest < ActiveSupport::TestCase
     assert_equal [ 9/4r, "cups flour" ], Quantity.scan("2 1/4 cups flour")
   end
 
+  test "ranges use the larger number" do
+    assert_equal [ 3, "cloves garlic" ], Quantity.scan("2-3 cloves garlic")
+    assert_equal [ 2, "onions" ], Quantity.scan("1 to 2 onions")
+    assert_equal [ 4, "tomatoes" ], Quantity.scan("3 – 4 tomatoes")
+  end
+
   test "formats cups and spoons as fractions" do
     assert_equal "1 1/2", Quantity.format(1.5, Unit["cup"])
     assert_equal "1/3", Quantity.format(1/3r, Unit["cup"])

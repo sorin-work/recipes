@@ -94,6 +94,11 @@ class RecipeTest < ActiveSupport::TestCase
     assert_equal @user.recipes.order(created_at: :desc).to_a, @user.recipes.sorted("nonsense").to_a
   end
 
+  test "recipes without times sort after quick ones" do
+    untimed = @user.recipes.create!(title: "Aaa mystery stew", servings: 2)
+    assert_equal untimed, @user.recipes.sorted("quickest").to_a.last
+  end
+
   test "scale_for" do
     recipe = recipes(:pancakes)
     assert_equal 1, recipe.scale_for(4)

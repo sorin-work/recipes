@@ -17,7 +17,10 @@ class Recipe < ApplicationRecord
   SORTS = {
     "newest" => { created_at: :desc },
     "title" => { title: :asc },
-    "quickest" => Arel.sql("COALESCE(prep_minutes, 0) + COALESCE(cook_minutes, 0) ASC, title ASC")
+    # Recipes without any times go last rather than looking like the quickest.
+    "quickest" => Arel.sql(
+      "(prep_minutes IS NULL AND cook_minutes IS NULL) ASC, COALESCE(prep_minutes, 0) + COALESCE(cook_minutes, 0) ASC, title ASC"
+    )
   }.freeze
 
   normalizes :title, with: ->(title) { title.squish }

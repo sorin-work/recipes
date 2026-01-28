@@ -22,6 +22,10 @@ module DurationParser
       found = true
       total += unit.start_with?("h") ? value * 60 : value
     end
+    # "1 hr 15" - a bare number after the hours is minutes.
+    if found && (bare = text.match(/(?:#{HOURS})\s*(\d+)\s*\z/o))
+      total += bare[1].to_i
+    end
     return text.to_i if !found && text.match?(/\A\d+\z/)
     return unless found
 

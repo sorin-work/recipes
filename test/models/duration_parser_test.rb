@@ -27,4 +27,9 @@ class DurationParserTest < ActiveSupport::TestCase
     assert_nil minutes("")
     assert_nil minutes(nil)
   end
+
+  test "minutes after hours without a unit" do
+    assert_equal 75, minutes("1 hr 15")
+    assert_equal 135, minutes("2 hours 15")
+  end
 end

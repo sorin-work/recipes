@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     resource :favourite, only: %i[ create destroy ], module: :recipes
     resource :duplicate, only: %i[ create ], module: :recipes
   end
+  resources :meal_plan_entries, only: %i[ create update destroy ], path: "plan/entries"
 
   root "recipes#index"
 end

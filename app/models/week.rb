@@ -1,0 +1,31 @@
+# A Monday-to-Sunday week, the unit the planner and grocery list work in.
+class Week
+  include Comparable
+
+  attr_reader :start
+
+  def self.current
+    new(Date.current)
+  end
+
+  def self.parse(param)
+    param.present? ? new(Date.iso8601(param)) : current
+  end
+
+  def initialize(date)
+    @start = date.to_date.beginning_of_week(:monday)
+  end
+
+  def finish = start + 6
+  def days = (start..finish)
+  def previous = Week.new(start - 7)
+  def next = Week.new(start + 7)
+  def current? = include?(Date.current)
+  def include?(date) = days.cover?(date)
+  def to_param = start.iso8601
+  def <=>(other) = start <=> other.start
+
+  def label
+    "#{start.day}–#{finish.day} #{finish.strftime('%B %Y')}"
+  end
+end

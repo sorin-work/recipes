@@ -1,0 +1,34 @@
+<% content_for :title, "Meal plan" %>
+<% content_for :main_class, "main--wide" %>
+
+<div class="page-header">
+  <h1>Meal plan</h1>
+  <nav class="week-nav" aria-label="Weeks">
+    <%= link_to "←", plan_path(week: @week.previous), class: "button button--quiet", aria: { label: "Previous week" } %>
+    <span class="week-nav__label"><%= @week.label %></span>
+    <%= link_to "→", plan_path(week: @week.next), class: "button button--quiet", aria: { label: "Next week" } %>
+    <% unless @week.current? %>
+      <%= link_to "This week", plan_path, class: "button button--quiet" %>
+    <% end %>
+  </nav>
+</div>
+
+<div class="planner-actions">
+</div>
+
+<div class="planner">
+
+  <div class="planner__grid">
+    <% @week.days.each do |date| %>
+      <section class="planner__day<%= ' is-today' if date == Date.current %>" aria-labelledby="day-<%= date.iso8601 %>">
+        <h2 class="planner__day-name" id="day-<%= date.iso8601 %>">
+          <%= plan_day_label(date) %>
+          <% if date == Date.current %><span class="badge">Today</span><% end %>
+        </h2>
+        <% MealPlanEntry::MEALS.each do |meal| %>
+          <%= render "plans/cell", date: date, meal: meal, entries: @entries.fetch([ date, meal ], []) %>
+        <% end %>
+      </section>
+    <% end %>
+  </div>
+</div>

@@ -262,6 +262,17 @@ code {
   margin-top: var(--space-6);
 }
 
+.badge {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.1em 0.6em;
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  vertical-align: middle;
+}
 
 /* Flash messages */
 
@@ -442,3 +453,14 @@ textarea {
 }
 
 
+.week-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.week-nav__label {
+  font-weight: 600;
+  min-width: 11rem;
+  text-align: center;
+}

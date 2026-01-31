@@ -1,0 +1,4 @@
+<div class="planner__entry" id="<%= dom_id(entry) %>">
+  <%= link_to entry.recipe.title, recipe_path(entry.recipe, servings: entry.servings), class: "planner__entry-title", draggable: false %>
+  <span class="planner__servings"><%= pluralize(entry.servings, "serving") %></span>
+</div>

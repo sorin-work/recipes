@@ -1,0 +1,6 @@
+<div class="planner__cell" id="<%= plan_cell_id(date, meal) %>">
+  <span class="planner__meal"><%= meal.capitalize %></span>
+  <% entries.each do |entry| %>
+    <%= render "plans/entry", entry: entry %>
+  <% end %>
+</div>

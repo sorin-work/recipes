@@ -154,6 +154,9 @@
 }
 
 
+.add-to-plan {
+  margin-top: var(--space-6);
+}
 
 .tag-list {
   display: flex;

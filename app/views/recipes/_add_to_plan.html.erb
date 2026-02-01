@@ -1,0 +1,16 @@
+<section class="add-to-plan card" aria-labelledby="add-to-plan-heading">
+  <h2 id="add-to-plan-heading">Add to the meal plan</h2>
+  <%= form_with model: MealPlanEntry.new(recipe: recipe, on: Date.current, meal: "dinner", servings: servings),
+        url: meal_plan_entries_path, class: "form form--inline" do |form| %>
+    <%= form.hidden_field :recipe_id %>
+    <div class="field">
+      <%= form.label :on, "Day" %>
+      <%= form.date_field :on, required: true %>
+    </div>
+    <div class="field">
+      <%= form.label :meal %>
+      <%= form.select :meal, MealPlanEntry::MEALS.map { |meal| [ meal.capitalize, meal ] } %>
+    </div>
+    <%= form.submit "Add to plan", class: "button button--primary" %>
+  <% end %>
+</section>

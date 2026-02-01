@@ -1,0 +1,88 @@
+/* Weekly meal planner */
+
+.planner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+
+.planner__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(9rem, 1fr));
+  gap: var(--space-2);
+  overflow-x: auto;
+}
+
+.planner__day {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-2);
+  min-width: 0;
+}
+
+.planner__day.is-today {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.planner__day-name {
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
+  margin: var(--space-1) var(--space-1) var(--space-2);
+}
+
+.planner__cell {
+  min-height: 4.5rem;
+  border: 1px dashed transparent;
+  border-radius: var(--radius-small);
+  padding: var(--space-1);
+  margin-bottom: var(--space-1);
+  background: var(--color-surface-muted);
+}
+
+
+.planner__meal {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+}
+
+.planner__entry {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  padding: var(--space-1) var(--space-2);
+  padding-right: 1.6rem;
+  margin-bottom: var(--space-1);
+  font-size: 0.85rem;
+  cursor: grab;
+}
+
+.planner__entry-title {
+  display: block;
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.planner__servings {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+
+

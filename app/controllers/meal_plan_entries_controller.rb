@@ -1,4 +1,6 @@
 class MealPlanEntriesController < ApplicationController
+  before_action :set_entry, only: %i[ destroy ]
+
   def create
     @entry = Current.user.meal_plan_entries.new(entry_params.except(:recipe_id))
     @entry.recipe = Current.user.recipes.find(entry_params[:recipe_id])
@@ -11,7 +13,15 @@ class MealPlanEntriesController < ApplicationController
     end
   end
 
+  def destroy
+    @entry.destroy!
+    respond_with_cells([ [ @entry.on, @entry.meal ] ], notice: "Removed #{@entry.recipe.title} from #{day_and_meal(@entry)}.")
+  end
+
   private
+    def set_entry
+      @entry = Current.user.meal_plan_entries.find(params[:id])
+    end
 
     def entry_params
       params.expect(meal_plan_entry: %i[ recipe_id on meal servings ])

@@ -86,4 +86,18 @@
 }
 
 
+.planner__remove {
+  position: absolute;
+  top: 0.1rem;
+  right: 0.2rem;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.planner__remove:hover {
+  color: var(--color-danger);
+}
 

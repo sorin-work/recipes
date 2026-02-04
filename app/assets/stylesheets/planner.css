@@ -7,6 +7,50 @@
   margin-bottom: var(--space-4);
 }
 
+.planner--with-sidebar {
+  display: grid;
+  grid-template-columns: 15rem 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.planner__sidebar {
+  position: sticky;
+  top: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+}
+
+.planner__sidebar h2 {
+  font-size: 1.1rem;
+}
+
+.planner__recipes {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-3) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.planner__recipe {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: var(--color-surface-muted);
+  cursor: grab;
+  font-size: 0.9rem;
+}
+
+.planner__recipe.is-dragging,
+.planner__entry.is-dragging {
+  opacity: 0.5;
+}
 
 .planner__grid {
   display: grid;
@@ -46,6 +90,10 @@
   background: var(--color-surface-muted);
 }
 
+.planner__cell.is-drop-target {
+  border-color: var(--color-primary);
+  background: var(--color-notice-bg);
+}
 
 .planner__meal {
   display: block;

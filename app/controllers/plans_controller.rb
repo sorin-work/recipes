@@ -3,5 +3,6 @@ class PlansController < ApplicationController
     @week = Week.parse(params[:week])
     @entries = Current.user.meal_plan_entries.in_week(@week).includes(:recipe).ordered
       .group_by { |entry| [ entry.on, entry.meal ] }
+    @recipes = Current.user.recipes.order(:title)
   end
 end

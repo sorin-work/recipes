@@ -1,4 +1,6 @@
-<div class="planner__cell" id="<%= plan_cell_id(date, meal) %>">
+<div class="planner__cell" id="<%= plan_cell_id(date, meal) %>"
+     data-date="<%= date.iso8601 %>" data-meal="<%= meal %>"
+     data-action="dragover->planner#dragover dragleave->planner#dragleave drop->planner#drop">
   <span class="planner__meal"><%= meal.capitalize %></span>
   <% entries.each do |entry| %>
     <%= render "plans/entry", entry: entry %>

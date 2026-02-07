@@ -27,7 +27,7 @@
         <li class="planner__recipe" draggable="true"
             data-drag-type="recipe" data-drag-id="<%= recipe.id %>"
             data-action="dragstart->planner#dragstart dragend->planner#dragend">
-          <%= recipe.title %>
+          <%= "★ " if recipe.favourite? %><%= recipe.title %>
         </li>
       <% end %>
     </ul>

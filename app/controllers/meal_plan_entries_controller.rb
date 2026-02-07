@@ -1,5 +1,5 @@
 class MealPlanEntriesController < ApplicationController
-  before_action :set_entry, only: %i[ destroy ]
+  before_action :set_entry, only: %i[ update destroy ]
 
   def create
     @entry = Current.user.meal_plan_entries.new(entry_params.except(:recipe_id))
@@ -10,6 +10,17 @@ class MealPlanEntriesController < ApplicationController
     else
       redirect_back_or_to plan_path(week: Week.new(@entry.on || Date.current)),
         alert: "Couldn't add that: #{@entry.errors.full_messages.to_sentence}."
+    end
+  end
+
+  # Moving an entry to another day or meal, or changing its servings.
+  def update
+    from = [ @entry.on, @entry.meal ]
+    if @entry.update(entry_params.except(:recipe_id))
+      respond_with_cells([ from, [ @entry.on, @entry.meal ] ].uniq, notice: "Updated #{@entry.recipe.title}.")
+    else
+      redirect_back_or_to plan_path(week: Week.new(from.first)),
+        alert: "Couldn't update that: #{@entry.errors.full_messages.to_sentence}."
     end
   end
 

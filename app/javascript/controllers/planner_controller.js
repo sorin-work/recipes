@@ -28,6 +28,8 @@ export default class extends Controller {
   }
 
   dragleave(event) {
+    // Moving over a meal inside the cell fires dragleave on the cell too.
+    if (event.currentTarget.contains(event.relatedTarget)) return
     event.currentTarget.classList.remove("is-drop-target")
   }
 

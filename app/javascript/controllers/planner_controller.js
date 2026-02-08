@@ -18,6 +18,8 @@ export default class extends Controller {
   dragend(event) {
     event.currentTarget.classList.remove("is-dragging")
     this.dragging = null
+    // A drag cancelled with Escape or dropped outside never fires dragleave.
+    for (const cell of this.element.querySelectorAll(".is-drop-target")) cell.classList.remove("is-drop-target")
   }
 
   dragover(event) {

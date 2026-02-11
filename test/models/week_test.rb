@@ -24,4 +24,10 @@ class WeekTest < ActiveSupport::TestCase
     assert_equal Week.current, Week.parse(nil)
     assert_equal "2026-03-02", Week.parse("2026-03-02").to_param
   end
+
+  test "parse falls back to this week for anything unreadable" do
+    assert_equal Week.current, Week.parse("next tuesday")
+    assert_equal Week.current, Week.parse("2026-02-31")
+    assert_equal Week.current, Week.parse([ "2026-03-02" ])
+  end
 end

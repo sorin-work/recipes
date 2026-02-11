@@ -22,6 +22,12 @@ class PlansControllerTest < ActionDispatch::IntegrationTest
     assert_select ".week-nav__label", @week.next.label
   end
 
+  test "a week param that isn't a date shows this week" do
+    get plan_path(week: "garbage")
+    assert_response :success
+    assert_select ".week-nav__label", @week.label
+  end
+
   test "lists recipes to drag" do
     get plan_path
     assert_select ".planner__recipe[draggable=true]", 2

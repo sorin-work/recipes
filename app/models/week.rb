@@ -8,8 +8,11 @@ class Week
     new(Date.current)
   end
 
+  # From a ?week=2026-03-02 parameter. Anything unreadable means this week.
   def self.parse(param)
-    param.present? ? new(Date.iso8601(param)) : current
+    param.present? ? new(Date.iso8601(param.to_s)) : current
+  rescue Date::Error
+    current
   end
 
   def initialize(date)

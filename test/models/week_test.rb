@@ -19,6 +19,11 @@ class WeekTest < ActiveSupport::TestCase
     assert_equal "2–8 March 2026", Week.new(Date.new(2026, 3, 2)).label
   end
 
+  test "labels for weeks that span two months or years" do
+    assert_equal "30 Mar – 5 Apr 2026", Week.new(Date.new(2026, 3, 30)).label
+    assert_equal "29 Dec 2025 – 4 Jan 2026", Week.new(Date.new(2025, 12, 29)).label
+  end
+
   test "parse" do
     assert_equal Date.new(2026, 3, 2), Week.parse("2026-03-04").start
     assert_equal Week.current, Week.parse(nil)

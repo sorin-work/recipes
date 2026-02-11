@@ -29,6 +29,12 @@ class Week
   def <=>(other) = start <=> other.start
 
   def label
-    "#{start.day}–#{finish.day} #{finish.strftime('%B %Y')}"
+    if start.month == finish.month
+      "#{start.day}–#{finish.day} #{finish.strftime('%B %Y')}"
+    elsif start.year == finish.year
+      "#{start.strftime('%-d %b')} – #{finish.strftime('%-d %b %Y')}"
+    else
+      "#{start.strftime('%-d %b %Y')} – #{finish.strftime('%-d %b %Y')}"
+    end
   end
 end

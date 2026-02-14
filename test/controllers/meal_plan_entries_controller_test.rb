@@ -58,6 +58,13 @@ class MealPlanEntriesControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-stream[action=replace]", 2
   end
 
+  test "change servings" do
+    entry = @user.meal_plan_entries.create!(recipe: recipes(:pasta), on: @monday, meal: "dinner")
+
+    patch meal_plan_entry_path(entry), params: { meal_plan_entry: { servings: 6 } }
+    assert_equal 6, entry.reload.servings
+  end
+
   test "remove" do
     entry = @user.meal_plan_entries.create!(recipe: recipes(:pasta), on: @monday, meal: "dinner")
 

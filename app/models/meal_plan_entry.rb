@@ -6,7 +6,7 @@ class MealPlanEntry < ApplicationRecord
 
   enum :meal, MEALS.index_with(&:itself), validate: true
 
-  before_validation -> { self.servings = recipe.servings if recipe }, on: :create
+  before_validation -> { self.servings ||= recipe&.servings }
 
   validates :on, presence: true
   validates :servings, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 100 }

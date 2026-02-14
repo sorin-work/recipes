@@ -32,4 +32,9 @@ class MealPlanEntryTest < ActiveSupport::TestCase
 
     assert_equal [ breakfast, dinner, tuesday ], user.meal_plan_entries.ordered.to_a
   end
+
+  test "keeps servings that were chosen" do
+    entry = users(:one).meal_plan_entries.create!(recipe: recipes(:pancakes), on: Date.current, meal: "breakfast", servings: 2)
+    assert_equal 2, entry.servings
+  end
 end

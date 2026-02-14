@@ -2,7 +2,13 @@
      data-drag-type="entry" data-drag-id="<%= entry.id %>"
      data-action="dragstart->planner#dragstart dragend->planner#dragend">
   <%= link_to entry.recipe.title, recipe_path(entry.recipe, servings: entry.servings), class: "planner__entry-title", draggable: false %>
-  <span class="planner__servings"><%= pluralize(entry.servings, "serving") %></span>
+  <%= form_with model: entry, url: meal_plan_entry_path(entry), method: :patch, class: "planner__servings",
+        data: { controller: "autosubmit", action: "change->autosubmit#submit" } do |form| %>
+    <%= hidden_field_tag :from_planner, 1, id: nil %>
+    <%= form.label :servings, "Servings", for: "servings-#{entry.id}", class: "visually-hidden" %>
+    <%= form.number_field :servings, min: 1, max: 100, id: "servings-#{entry.id}", class: "planner__servings-input" %>
+    <span aria-hidden="true">servings</span>
+  <% end %>
   <%= button_to meal_plan_entry_path(entry, from_planner: 1), method: :delete, class: "planner__remove",
         aria: { label: "Remove #{entry.recipe.title}" } do %>
     <span aria-hidden="true">×</span>

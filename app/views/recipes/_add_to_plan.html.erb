@@ -11,6 +11,10 @@
       <%= form.label :meal %>
       <%= form.select :meal, MealPlanEntry::MEALS.map { |meal| [ meal.capitalize, meal ] } %>
     </div>
+    <div class="field">
+      <%= form.label :servings %>
+      <%= form.number_field :servings, min: 1, max: 100, required: true %>
+    </div>
     <%= form.submit "Add to plan", class: "button button--primary" %>
   <% end %>
 </section>

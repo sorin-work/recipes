@@ -133,6 +133,11 @@
   margin: 0;
 }
 
+.planner__servings-input {
+  width: 3.2rem !important;
+  padding: 0.1rem 0.25rem !important;
+  font-size: 0.75rem !important;
+}
 
 .planner__remove {
   position: absolute;

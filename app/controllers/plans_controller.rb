@@ -10,8 +10,10 @@ class PlansController < ApplicationController
     @week = Week.parse(params[:week])
     copied = 0
     MealPlanEntry.transaction do
+      existing = Current.user.meal_plan_entries.in_week(@week).pluck(:recipe_id, :on, :meal).to_set
       Current.user.meal_plan_entries.in_week(@week.previous).find_each do |entry|
         attributes = { recipe_id: entry.recipe_id, on: entry.on + 7, meal: entry.meal }
+        next if existing.include?(attributes.values)
 
         Current.user.meal_plan_entries.create!(attributes.merge(servings: entry.servings))
         copied += 1

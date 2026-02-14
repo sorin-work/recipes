@@ -45,4 +45,13 @@ class PlansControllerTest < ActionDispatch::IntegrationTest
     assert_equal @week.start + 2, copied.on
     assert_equal 3, copied.servings
   end
+
+  test "copying twice doesn't double up" do
+    @user.meal_plan_entries.create!(recipe: recipes(:pasta), on: @week.previous.start, meal: "dinner")
+
+    post copy_previous_week_plan_path(week: @week)
+    post copy_previous_week_plan_path(week: @week)
+
+    assert_equal 1, @user.meal_plan_entries.in_week(@week).count
+  end
 end

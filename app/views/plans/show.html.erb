@@ -14,6 +14,7 @@
 </div>
 
 <div class="planner-actions">
+  <%= button_to "Copy last week", copy_previous_week_plan_path(week: @week), class: "button" %>
 </div>
 
 <div class="planner planner--with-sidebar" data-controller="planner"

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   end
 
   resource :plan, only: %i[ show ] do
+    post :copy_previous_week
   end
   resources :meal_plan_entries, only: %i[ create update destroy ], path: "plan/entries"
 

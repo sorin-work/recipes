@@ -32,4 +32,17 @@ class PlansControllerTest < ActionDispatch::IntegrationTest
     get plan_path
     assert_select ".planner__recipe[draggable=true]", 2
   end
+
+  test "copy last week" do
+    @user.meal_plan_entries.create!(recipe: recipes(:pasta), on: @week.previous.start + 2, meal: "dinner", servings: 3)
+
+    assert_difference -> { @user.meal_plan_entries.in_week(@week).count } do
+      post copy_previous_week_plan_path(week: @week)
+    end
+    assert_redirected_to plan_path(week: @week)
+
+    copied = @user.meal_plan_entries.in_week(@week).sole
+    assert_equal @week.start + 2, copied.on
+    assert_equal 3, copied.servings
+  end
 end

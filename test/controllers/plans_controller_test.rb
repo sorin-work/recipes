@@ -54,4 +54,15 @@ class PlansControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal 1, @user.meal_plan_entries.in_week(@week).count
   end
+
+  test "clear a week" do
+    @user.meal_plan_entries.create!(recipe: recipes(:pasta), on: @week.start, meal: "dinner")
+    @user.meal_plan_entries.create!(recipe: recipes(:pasta), on: @week.next.start, meal: "dinner")
+
+    delete clear_plan_path(week: @week)
+
+    assert_redirected_to plan_path(week: @week)
+    assert_equal 0, @user.meal_plan_entries.in_week(@week).count
+    assert_equal 1, @user.meal_plan_entries.count
+  end
 end

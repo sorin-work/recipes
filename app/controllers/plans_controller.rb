@@ -22,4 +22,10 @@ class PlansController < ApplicationController
 
     redirect_to plan_path(week: @week), notice: copied.zero? ? "Nothing new to copy from last week." : "Copied #{helpers.pluralize(copied, 'meal')} from last week."
   end
+
+  def clear
+    @week = Week.parse(params[:week])
+    removed = Current.user.meal_plan_entries.in_week(@week).delete_all
+    redirect_to plan_path(week: @week), notice: "Removed #{helpers.pluralize(removed, 'meal')} from this week.", status: :see_other
+  end
 end

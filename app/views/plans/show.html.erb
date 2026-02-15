@@ -15,6 +15,10 @@
 
 <div class="planner-actions">
   <%= button_to "Copy last week", copy_previous_week_plan_path(week: @week), class: "button" %>
+  <% if @entries.any? %>
+    <%= button_to "Clear week", clear_plan_path(week: @week), method: :delete, class: "button button--danger",
+          form: { data: { turbo_confirm: "Remove every meal planned for #{@week.label}?" } } %>
+  <% end %>
 </div>
 
 <div class="planner planner--with-sidebar" data-controller="planner"

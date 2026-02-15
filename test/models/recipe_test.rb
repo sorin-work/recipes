@@ -133,4 +133,13 @@ class RecipeTest < ActiveSupport::TestCase
     recipe.photo.attach(io: file_fixture("photo.png").open, filename: "photo.png", content_type: "image/png")
     assert recipe.valid?
   end
+
+  test "deleting a recipe removes it from the plan" do
+    recipe = recipes(:pasta)
+    recipe.user.meal_plan_entries.create!(recipe: recipe, on: Date.current, meal: "dinner")
+
+    assert_difference -> { MealPlanEntry.count }, -1 do
+      recipe.destroy!
+    end
+  end
 end

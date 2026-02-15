@@ -154,3 +154,25 @@
   color: var(--color-danger);
 }
 
+.planner__add summary {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  list-style: none;
+}
+
+.planner__add summary::before {
+  content: "+ ";
+}
+
+.planner__add-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+
+.planner__add-form select {
+  font-size: 0.8rem;
+  padding: 0.25rem;
+}

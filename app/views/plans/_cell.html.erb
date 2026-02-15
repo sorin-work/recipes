@@ -5,4 +5,17 @@
   <% entries.each do |entry| %>
     <%= render "plans/entry", entry: entry %>
   <% end %>
+  <% if plan_recipe_options.any? %>
+    <details class="planner__add">
+      <summary>Add <span class="visually-hidden"><%= meal %> on <%= plan_day_label(date) %></span></summary>
+      <%= form_with model: MealPlanEntry.new, url: meal_plan_entries_path, class: "planner__add-form" do |form| %>
+        <%= hidden_field_tag :from_planner, 1, id: nil %>
+        <%= form.hidden_field :on, value: date.iso8601, id: nil %>
+        <%= form.hidden_field :meal, value: meal, id: nil %>
+        <%= form.label :recipe_id, "Recipe", for: "add-#{date.iso8601}-#{meal}", class: "visually-hidden" %>
+        <%= form.select :recipe_id, plan_recipe_options, {}, id: "add-#{date.iso8601}-#{meal}" %>
+        <%= form.submit "Add", class: "button button--small" %>
+      <% end %>
+    </details>
+  <% end %>
 </div>

@@ -1,6 +1,7 @@
 class GroceryListsController < ApplicationController
+  include WeekParam
+
   def show
-    @week = Week.parse(params[:week])
     @list = GroceryList.new(Current.user, @week)
 
     render

@@ -1,13 +1,13 @@
 class PlansController < ApplicationController
+  include WeekParam
+
   def show
-    @week = Week.parse(params[:week])
     @entries = Current.user.meal_plan_entries.in_week(@week).includes(:recipe).ordered
       .group_by { |entry| [ entry.on, entry.meal ] }
     @recipes = Current.user.recipes.order(favourite: :desc, title: :asc)
   end
 
   def copy_previous_week
-    @week = Week.parse(params[:week])
     copied = 0
     MealPlanEntry.transaction do
       existing = Current.user.meal_plan_entries.in_week(@week).pluck(:recipe_id, :on, :meal).to_set
@@ -24,7 +24,6 @@ class PlansController < ApplicationController
   end
 
   def clear
-    @week = Week.parse(params[:week])
     removed = Current.user.meal_plan_entries.in_week(@week).delete_all
     redirect_to plan_path(week: @week), notice: "Removed #{helpers.pluralize(removed, 'meal')} from this week.", status: :see_other
   end

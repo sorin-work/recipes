@@ -14,24 +14,22 @@ class GroceryList
       @as_needed = false
     end
 
-    def add(quantity, unit, recipe)
+    def add(amount, recipe)
       @recipes |= [ recipe ]
-      return @as_needed = true if quantity.nil?
+      return @as_needed = true if amount.nil?
 
-      existing = @amounts.find { |amount| amount[:unit] == unit }
-      if existing
-        existing[:quantity] += quantity
+      index = @amounts.index { |existing| existing.compatible?(amount) }
+      if index
+        @amounts[index] += amount
       else
-        @amounts << { quantity: quantity, unit: unit }
+        @amounts << amount
       end
     end
 
+    # "1.5 kg" or "2 cans + 400 g" when the recipes measure it differently.
     def amount_text
-      text = @amounts.map do |amount|
-        unit = Unit.find(amount[:unit])
-        [ Quantity.format(amount[:quantity], unit), unit&.label_for(amount[:quantity]) ].compact.join(" ")
-      end
-      text << "as needed" if @amounts.empty?
+      text = @amounts.reject(&:zero?).map(&:to_s)
+      text << "as needed" if text.empty?
       text.join(" + ")
     end
 
@@ -69,7 +67,8 @@ class GroceryList
           next if key.empty?
 
           item = by_key[key] ||= Item.new(key, display_name(ingredient.name))
-          item.add(ingredient.scaled_quantity(factor), ingredient.unit, entry.recipe.title)
+          amount = ingredient.quantity && Amount.from(ingredient.scaled_quantity(factor), ingredient.unit)
+          item.add(amount, entry.recipe.title)
         end
       end
       items = by_key.values.sort_by(&:name)

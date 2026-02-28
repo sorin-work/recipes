@@ -28,6 +28,7 @@
           <nav class="site-nav" id="site-nav" aria-label="Main">
             <%= nav_link "Recipes", recipes_path %>
             <%= nav_link "Planner", plan_path %>
+            <%= nav_link "Groceries", grocery_list_path %>
             <div class="site-nav__account">
               <span class="site-nav__user"><%= Current.user.name.presence || Current.user.email_address %></span>
               <%= button_to "Sign out", session_path, method: :delete, class: "button button--quiet button--small" %>

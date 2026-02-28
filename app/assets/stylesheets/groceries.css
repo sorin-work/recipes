@@ -1,0 +1,62 @@
+/* Grocery list and pantry */
+
+.grocery-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.grocery-sections {
+  columns: 2 22rem;
+  column-gap: var(--space-5);
+}
+
+.grocery-section {
+  break-inside: avoid;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.grocery-section h2 {
+  font-size: 1.05rem;
+  color: var(--color-accent);
+}
+
+.grocery-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.grocery-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.grocery-item:last-child {
+  border-bottom: none;
+}
+
+
+.grocery-item__name {
+  font-weight: 500;
+}
+
+.grocery-item__amount {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+
+
+
+
+

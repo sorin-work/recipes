@@ -1,0 +1,29 @@
+<% content_for :title, "Groceries" %>
+
+<div class="page-header">
+  <h1>Grocery list</h1>
+  <nav class="week-nav" aria-label="Weeks">
+    <%= link_to "←", grocery_list_path(week: @week.previous), class: "button button--quiet", aria: { label: "Previous week" } %>
+    <span class="week-nav__label"><%= @week.label %></span>
+    <%= link_to "→", grocery_list_path(week: @week.next), class: "button button--quiet", aria: { label: "Next week" } %>
+  </nav>
+</div>
+
+<div class="grocery-actions">
+  <%= link_to "Back to the plan", plan_path(week: @week), class: "button button--quiet" %>
+</div>
+
+
+<% if @list.empty? %>
+  <div class="empty-state">
+    <h2>Nothing to buy yet</h2>
+    <p>Plan some meals for this week and their ingredients will show up here, added up and sorted by aisle.</p>
+    <p><%= link_to "Open the planner", plan_path(week: @week), class: "button button--primary" %></p>
+  </div>
+<% else %>
+  <ul class="grocery-items">
+    <% @list.to_buy.each do |item| %>
+      <%= render "grocery_lists/item", item: item %>
+    <% end %>
+  </ul>
+<% end %>

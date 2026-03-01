@@ -37,4 +37,9 @@ class UnitTest < ActiveSupport::TestCase
     assert_equal "cup", Unit["cup"].label_for(0.5)
     assert_equal "g", Unit["g"].label_for(250)
   end
+
+  test "three teaspoons are exactly one tablespoon and sixteen tablespoons a cup" do
+    assert_equal Unit["tbsp"].factor, Unit["tsp"].factor * 3
+    assert_equal Unit["cup"].factor, Unit["tbsp"].factor * 16
+  end
 end

@@ -51,9 +51,11 @@ class Unit
 
   def hash = code.hash
 
-  TEASPOON = 4.92892
-  TABLESPOON = 14.7868
-  CUP = 236.588
+  # Spoons and cups are defined from each other so three teaspoons are exactly one
+  # tablespoon, rather than a rounding error short of it.
+  TABLESPOON = 14.78676478125r
+  TEASPOON = TABLESPOON / 3
+  CUP = TABLESPOON * 16
 
   ALL = [
     new(code: "g", dimension: :mass, system: :metric, aliases: %w[gr gm gram grams gramme grammes]),

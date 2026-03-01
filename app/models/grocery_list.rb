@@ -5,6 +5,7 @@
 class GroceryList
   class Item
     attr_reader :key, :name, :amounts, :recipes
+    attr_reader :aisle
 
     def initialize(key, name)
       @key = key
@@ -12,6 +13,7 @@ class GroceryList
       @amounts = []
       @recipes = []
       @as_needed = false
+      @aisle = Aisle.for(name)
     end
 
     def add(amount, recipe)
@@ -51,6 +53,11 @@ class GroceryList
 
   def to_buy
     items
+  end
+
+  # [ ["produce", [items...]], ["dairy & eggs", [...]], ... ] in shop order.
+  def sections
+    to_buy.group_by(&:aisle).sort_by { |aisle, _| Aisle::ORDER.index(aisle) }
   end
 
   def empty?

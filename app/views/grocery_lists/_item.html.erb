@@ -1,4 +1,11 @@
-<li class="grocery-item">
-  <span class="grocery-item__name"><%= item.name %></span>
+<li class="grocery-item<%= ' is-checked' if item.checked %>" id="item-<%= item.key.parameterize %>">
+  <%= form_with url: grocery_check_path(week: @week, item_key: item.key), method: item.checked ? :delete : :post,
+        class: "grocery-item__check", data: { controller: "autosubmit", action: "change->autosubmit#submit" } do |form| %>
+    <label class="checkbox">
+      <%= check_box_tag "checked", "1", item.checked, id: "check-#{item.key.parameterize}" %>
+      <span class="grocery-item__name"><%= item.name %></span>
+    </label>
+    <noscript><%= form.submit item.checked ? "Untick" : "Tick", class: "button button--small" %></noscript>
+  <% end %>
   <span class="grocery-item__amount"><%= item.amount_text %></span>
 </li>

@@ -1,4 +1,7 @@
 <% content_for :title, "Groceries" %>
+<% content_for :head do %>
+  <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+<% end %>
 
 <div class="page-header">
   <h1>Grocery list</h1>
@@ -26,7 +29,7 @@
       <section class="grocery-section" aria-labelledby="aisle-<%= aisle.parameterize %>">
         <h2 id="aisle-<%= aisle.parameterize %>"><%= aisle.capitalize %></h2>
         <ul class="grocery-items">
-          <% items.each do |item| %>
+          <% items.sort_by { |item| item.checked ? 1 : 0 }.each do |item| %>
             <%= render "grocery_lists/item", item: item %>
           <% end %>
         </ul>

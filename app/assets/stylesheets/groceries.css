@@ -45,6 +45,9 @@
   border-bottom: none;
 }
 
+.grocery-item__check {
+  margin: 0;
+}
 
 .grocery-item__name {
   font-weight: 500;
@@ -57,6 +60,11 @@
 
 
 
+.grocery-item.is-checked .grocery-item__name,
+.grocery-item.is-checked .grocery-item__amount {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
 
 
 

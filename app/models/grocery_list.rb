@@ -6,6 +6,7 @@ class GroceryList
   class Item
     attr_reader :key, :name, :amounts, :recipes
     attr_reader :aisle
+    attr_accessor :checked
 
     def initialize(key, name)
       @key = key
@@ -79,6 +80,7 @@ class GroceryList
         end
       end
       items = by_key.values.sort_by(&:name)
+      mark_checked(items)
       items
     end
 
@@ -88,5 +90,10 @@ class GroceryList
 
     def display_name(name)
       name.sub(/\A(?:#{IngredientName::DESCRIPTORS.to_a.join('|')})\s+/i, "").downcase
+    end
+
+    def mark_checked(items)
+      checked = user.grocery_checks.where(week_start: week.start).pluck(:item_key).to_set
+      items.each { |item| item.checked = checked.include?(item.key) }
     end
 end

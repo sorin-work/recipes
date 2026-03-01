@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   resources :meal_plan_entries, only: %i[ create update destroy ], path: "plan/entries"
 
   resource :grocery_list, only: %i[ show ], path: "groceries"
+  resource :grocery_check, only: %i[ create destroy ], path: "groceries/check"
 
   root "recipes#index"
 end

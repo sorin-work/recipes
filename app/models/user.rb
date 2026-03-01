@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :recipes, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :meal_plan_entries, dependent: :delete_all
+  has_many :grocery_checks, dependent: :delete_all
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   normalizes :name, with: ->(name) { name.squish }

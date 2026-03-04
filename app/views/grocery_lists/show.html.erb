@@ -16,6 +16,12 @@
   <%= link_to "Back to the plan", plan_path(week: @week), class: "button button--quiet" %>
 </div>
 
+<% unless @list.empty? %>
+  <% left = @list.to_buy.count { |item| !item.checked } %>
+  <p class="grocery-summary muted">
+    <%= pluralize(left, "item") %> to buy<% if left < @list.to_buy.size %>, <%= @list.to_buy.size - left %> ticked off<% end %>
+  </p>
+<% end %>
 
 <% if @list.empty? %>
   <div class="empty-state">

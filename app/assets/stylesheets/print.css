@@ -1,0 +1,52 @@
+/* Printing a recipe or the grocery list */
+
+@media print {
+  .site-header,
+  .flash-area,
+  .skip-link,
+  .page-header__actions,
+  .week-nav .button,
+  .grocery-actions,
+  .grocery-extras__form,
+  .grocery-item__have,
+  .grocery-item__remove,
+  .grocery-item__recipes,
+  .grocery-item__check noscript {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+  }
+
+  .main {
+    padding: 0;
+    max-width: none;
+  }
+
+  .card,
+  .grocery-section,
+  .recipe__ingredients {
+    box-shadow: none;
+    border: none;
+    padding: 0;
+  }
+
+  .grocery-sections {
+    columns: 2;
+  }
+
+  .grocery-item input[type="checkbox"] {
+    appearance: none;
+    width: 0.9em;
+    height: 0.9em;
+    border: 1px solid #000;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_01_152235) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_07_112229) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,6 +49,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_152235) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id", "week_start", "item_key"], name: "index_grocery_checks_on_user_id_and_week_start_and_item_key", unique: true
+  end
+
+  create_table "grocery_extras", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.date "week_start", null: false
+    t.string "name", null: false
+    t.boolean "checked", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "week_start"], name: "index_grocery_extras_on_user_id_and_week_start"
   end
 
   create_table "ingredients", force: :cascade do |t|
@@ -139,6 +149,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_152235) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "grocery_checks", "users"
+  add_foreign_key "grocery_extras", "users"
   add_foreign_key "ingredients", "recipes"
   add_foreign_key "meal_plan_entries", "recipes"
   add_foreign_key "meal_plan_entries", "users"

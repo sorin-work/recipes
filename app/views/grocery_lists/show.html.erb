@@ -43,3 +43,32 @@
     <% end %>
   </div>
 <% end %>
+
+<section class="grocery-section grocery-extras" aria-labelledby="extras-heading">
+  <h2 id="extras-heading">Extras</h2>
+  <% if @extras.any? %>
+    <ul class="grocery-items">
+      <% @extras.each do |extra| %>
+        <li class="grocery-item<%= ' is-checked' if extra.checked %>">
+          <%= form_with model: extra, url: grocery_extra_path(extra), method: :patch, class: "grocery-item__check",
+                data: { controller: "autosubmit", action: "change->autosubmit#submit" } do |form| %>
+            <%= hidden_field_tag "grocery_extra[checked]", "0", id: nil %>
+            <label class="checkbox">
+              <%= check_box_tag "grocery_extra[checked]", "1", extra.checked, id: dom_id(extra, :checked) %>
+              <span class="grocery-item__name"><%= extra.name %></span>
+            </label>
+            <noscript><%= form.submit "Save", class: "button button--small" %></noscript>
+          <% end %>
+          <%= button_to grocery_extra_path(extra), method: :delete, class: "grocery-item__remove", aria: { label: "Remove #{extra.name}" } do %>
+            <span aria-hidden="true">×</span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+  <%= form_with url: grocery_extras_path(week: @week), scope: :grocery_extra, class: "form form--inline grocery-extras__form" do |form| %>
+    <%= form.label :name, "Add something else", class: "visually-hidden" %>
+    <%= form.text_field :name, placeholder: "Add something else, e.g. coffee", maxlength: 100, required: true %>
+    <%= form.submit "Add", class: "button" %>
+  <% end %>
+</section>

@@ -27,4 +27,13 @@ class GroceryListsControllerTest < ActionDispatch::IntegrationTest
     get grocery_list_path
     assert_select ".grocery-section h2", "Produce"
   end
+
+  test "plain text" do
+    @user.meal_plan_entries.create!(recipe: recipes(:pasta), on: @week.start, meal: "dinner")
+
+    get grocery_list_path(week: @week, format: :txt)
+    assert_response :success
+    assert_equal "text/plain", response.media_type
+    assert_includes response.body, "[ ] spaghetti - 200 g"
+  end
 end

@@ -86,4 +86,12 @@ class GroceryListTest < ActiveSupport::TestCase
     assert item("spaghetti").checked
     assert_not item("garlic").checked
   end
+
+  test "plain text version" do
+    plan recipes(:pasta)
+    text = list.to_text
+
+    assert_match(/\AGrocery list for /, text)
+    assert_includes text, "[ ] spaghetti - 200 g"
+  end
 end

@@ -65,6 +65,22 @@ class GroceryList
     items.empty?
   end
 
+  def to_text
+    lines = [ "Grocery list for #{week.label}", "" ]
+    sections.each do |aisle, section_items|
+      lines << aisle.capitalize
+      section_items.each { |item| lines << "#{item.checked ? '[x]' : '[ ]'} #{item.name} - #{item.amount_text}" }
+      lines << ""
+    end
+    extras = user.grocery_extras.where(week_start: week.start).order(:created_at)
+    if extras.any?
+      lines << "Extras"
+      extras.each { |extra| lines << "#{extra.checked ? '[x]' : '[ ]'} #{extra.name}" }
+      lines << ""
+    end
+    lines.join("\n").strip + "\n"
+  end
+
   private
     def build_items
       by_key = {}

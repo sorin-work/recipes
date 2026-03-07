@@ -14,6 +14,7 @@
 
 <div class="grocery-actions">
   <%= link_to "Back to the plan", plan_path(week: @week), class: "button button--quiet" %>
+  <%= link_to "Plain text", grocery_list_path(week: @week, format: :txt), class: "button button--quiet", data: { turbo: false } %>
 </div>
 
 <% unless @list.empty? %>

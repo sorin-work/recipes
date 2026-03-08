@@ -14,3 +14,9 @@
 # ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.acronym "RESTful"
 # end
+
+# Ingredient names are singularised to match "onions" with "onion". These only
+# look plural.
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.uncountable %w[asparagus couscous hummus molasses swiss]
+end

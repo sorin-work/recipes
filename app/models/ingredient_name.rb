@@ -19,7 +19,9 @@ module IngredientName
       .reject { |word| DESCRIPTORS.include?(word) }
     return "" if words.empty?
 
-    words[-1] = words[-1].singularize
+    # Only words ending in s can be plurals; the inflector would otherwise turn
+    # "feta" into "fetum" (as in data and datum).
+    words[-1] = words[-1].singularize if words[-1].end_with?("s")
     words.join(" ")
   end
 end

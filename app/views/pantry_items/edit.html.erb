@@ -1,0 +1,10 @@
+<% content_for :title, "Edit #{@pantry_item.name}" %>
+
+<div class="page-header">
+  <h1>Edit pantry item</h1>
+</div>
+
+<div class="card">
+  <%= render "pantry_items/form", pantry_item: @pantry_item %>
+  <p><%= link_to "Back to the pantry", pantry_items_path %></p>
+</div>

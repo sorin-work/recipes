@@ -1,0 +1,9 @@
+salt:
+  user: one
+  name: salt
+
+flour:
+  user: one
+  name: plain flour
+  quantity: 1
+  unit: kg

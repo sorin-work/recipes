@@ -1,0 +1,45 @@
+<% content_for :title, "Pantry" %>
+
+<div class="page-header">
+  <h1>Pantry</h1>
+</div>
+
+<p class="lede">
+  What's already in the cupboard. Items here come off the grocery list: leave the
+  amount empty for staples you always have, or say how much you have and only the
+  rest goes on the list.
+</p>
+
+<section class="card pantry-form" aria-labelledby="pantry-add-heading">
+  <h2 id="pantry-add-heading">Add to the pantry</h2>
+  <%= render "pantry_items/form", pantry_item: @pantry_item %>
+</section>
+
+<% if @pantry_items.any? %>
+  <table class="table pantry-table">
+    <thead>
+      <tr>
+        <th scope="col">Item</th>
+        <th scope="col">Amount</th>
+        <th scope="col"><span class="visually-hidden">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @pantry_items.each do |item| %>
+        <tr id="<%= dom_id(item) %>">
+          <td><%= item.name %></td>
+          <td><%= item.staple? ? tag.span("Always in stock", class: "badge") : item.amount %></td>
+          <td class="table__actions">
+            <%= link_to "Edit", edit_pantry_item_path(item), class: "button button--small button--quiet" %>
+            <%= button_to "Remove", pantry_item_path(item), method: :delete, class: "button button--small button--quiet" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="empty-state">
+    <h2>Your pantry is empty</h2>
+    <p>Start with the staples you never run out of, like salt, pepper and olive oil.</p>
+  </div>
+<% end %>

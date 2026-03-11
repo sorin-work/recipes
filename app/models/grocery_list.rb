@@ -43,8 +43,11 @@ class GroceryList
       @as_needed
     end
 
+    # Takes what the pantry has off the first amount it can be compared with, so a
+    # kilo of flour in the cupboard covers 500 g in a recipe.
     def subtract(have)
-      @amounts = @amounts.map { |amount| amount.unit == have.unit ? amount - have : amount }
+      index = @amounts.index { |amount| amount.compatible?(have) }
+      @amounts[index] -= have if index
     end
 
     def in_pantry?

@@ -111,6 +111,15 @@ class GroceryListTest < ActiveSupport::TestCase
     assert_includes list.in_pantry.map(&:name), "spaghetti"
   end
 
+  test "pantry amounts in other units are converted" do
+    plan recipes(:pasta)
+    @user.pantry_items.create!(name: "spaghetti", amount_text: "1 kg")
+    @user.pantry_items.create!(name: "olive oil", amount_text: "1 tsp")
+
+    assert_includes list.in_pantry.map(&:name), "spaghetti"
+    assert_equal "1 2/3 tbsp", item("olive oil").amount_text
+  end
+
   test "plain text version" do
     plan recipes(:pasta)
     text = list.to_text

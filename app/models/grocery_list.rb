@@ -2,11 +2,14 @@
 #
 # Each planned meal's ingredients are scaled to the servings planned, matched by
 # normalised name (see IngredientName) and added up (see Amount).
+# Whatever the pantry already has is taken off; items the pantry fully covers
+# move to a separate "already have" list.
 class GroceryList
   class Item
     attr_reader :key, :name, :amounts, :recipes
     attr_reader :aisle
     attr_accessor :checked
+    attr_accessor :pantry_item
 
     def initialize(key, name)
       @key = key
@@ -39,6 +42,17 @@ class GroceryList
     def as_needed?
       @as_needed
     end
+
+    def subtract(have)
+      @amounts = @amounts.map { |amount| amount.unit == have.unit ? amount - have : amount }
+    end
+
+    def in_pantry?
+      return false unless pantry_item
+      return true if pantry_item.staple? || @amounts.empty?
+
+      @amounts.all?(&:zero?)
+    end
   end
 
   attr_reader :user, :week
@@ -53,7 +67,11 @@ class GroceryList
   end
 
   def to_buy
-    items
+    items.reject(&:in_pantry?)
+  end
+
+  def in_pantry
+    items.select(&:in_pantry?)
   end
 
   # [ ["produce", [items...]], ["dairy & eggs", [...]], ... ] in shop order.
@@ -97,6 +115,7 @@ class GroceryList
       end
       items = by_key.values.sort_by(&:name)
       mark_checked(items)
+      apply_pantry(items)
       items
     end
 
@@ -111,5 +130,15 @@ class GroceryList
     def mark_checked(items)
       checked = user.grocery_checks.where(week_start: week.start).pluck(:item_key).to_set
       items.each { |item| item.checked = checked.include?(item.key) }
+    end
+
+    def apply_pantry(items)
+      pantry = user.pantry_items.index_by(&:key)
+      items.each do |item|
+        next unless (pantry_item = pantry[item.key])
+
+        item.pantry_item = pantry_item
+        item.subtract(Amount.from(pantry_item.quantity, pantry_item.unit)) unless pantry_item.staple?
+      end
     end
 end

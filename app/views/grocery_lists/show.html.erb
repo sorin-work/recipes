@@ -74,3 +74,20 @@
     <%= form.submit "Add", class: "button" %>
   <% end %>
 </section>
+
+<% if @list.in_pantry.any? %>
+  <section class="grocery-section grocery-pantry" aria-labelledby="pantry-heading">
+    <h2 id="pantry-heading">Already in your pantry</h2>
+    <ul class="grocery-items grocery-items--muted">
+      <% @list.in_pantry.each do |item| %>
+        <li class="grocery-item">
+          <span class="grocery-item__name"><%= item.name %></span>
+          <span class="grocery-item__amount muted">
+            <%= item.pantry_item.staple? ? "always in stock" : "you have #{item.pantry_item.amount}" %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+    <p class="hint"><%= link_to "Edit your pantry", pantry_items_path %></p>
+  </section>
+<% end %>

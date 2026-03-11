@@ -4,6 +4,7 @@ class GroceryListTest < ActiveSupport::TestCase
   setup do
     @user = users(:one)
     @week = Week.current
+    @user.pantry_items.delete_all
   end
 
   def plan(recipe, servings: nil, day: 0, meal: "dinner")
@@ -85,6 +86,29 @@ class GroceryListTest < ActiveSupport::TestCase
 
     assert item("spaghetti").checked
     assert_not item("garlic").checked
+  end
+
+  test "staples in the pantry come off the list" do
+    plan recipes(:pancakes)
+    @user.pantry_items.create!(name: "Salt")
+
+    assert_includes list.in_pantry.map(&:name), "salt"
+    assert_not_includes list.to_buy.map(&:name), "salt"
+  end
+
+  test "pantry amounts are subtracted" do
+    plan recipes(:pasta), servings: 4
+    @user.pantry_items.create!(name: "spaghetti", amount_text: "150 g")
+
+    assert_equal "250 g", item("spaghetti").amount_text
+    assert_includes list.to_buy.map(&:name), "spaghetti"
+  end
+
+  test "enough in the pantry moves the item off the list" do
+    plan recipes(:pasta)
+    @user.pantry_items.create!(name: "spaghetti", amount_text: "500 g")
+
+    assert_includes list.in_pantry.map(&:name), "spaghetti"
   end
 
   test "plain text version" do

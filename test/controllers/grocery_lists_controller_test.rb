@@ -36,4 +36,12 @@ class GroceryListsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "text/plain", response.media_type
     assert_includes response.body, "[ ] spaghetti - 200 g"
   end
+
+  test "pantry items are listed separately" do
+    @user.meal_plan_entries.create!(recipe: recipes(:pancakes), on: @week.start, meal: "breakfast")
+
+    get grocery_list_path
+    assert_select ".grocery-pantry", /salt/
+    assert_select ".grocery-item__pantry", /you have 1 kg/
+  end
 end

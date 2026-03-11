@@ -74,6 +74,9 @@
   color: var(--color-text-muted);
 }
 
+.grocery-items--muted {
+  color: var(--color-text-muted);
+}
 
 .grocery-extras__form {
   margin-top: var(--space-3);

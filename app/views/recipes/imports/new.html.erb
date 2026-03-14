@@ -6,15 +6,7 @@
 
 <div class="import">
   <%= form_with model: @import, url: recipe_import_path, scope: :recipe_import, class: "form" do |form| %>
-    <% if @import.errors.any? %>
-      <div class="form-errors" role="alert">
-        <ul>
-          <% @import.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <%= error_messages_for @import %>
     <div class="field">
       <%= form.label :text, "Recipe text" %>
       <p class="hint" id="import-hint">

@@ -1,14 +1,5 @@
 <%= form_with(model: recipe, class: "form recipe-form") do |form| %>
-  <% if recipe.errors.any? %>
-    <div class="form-errors" role="alert">
-      <p class="form-errors__title"><%= pluralize(recipe.errors.count, "problem") %> to fix before saving:</p>
-      <ul>
-        <% recipe.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= error_messages_for recipe %>
 
   <div class="field">
     <%= form.label :title %>

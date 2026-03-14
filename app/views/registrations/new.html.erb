@@ -6,15 +6,7 @@
   <p class="muted">Keep your recipes, plan the week and get a grocery list that adds itself up.</p>
 
   <%= form_with model: @user, url: registration_path, class: "form" do |form| %>
-    <% if @user.errors.any? %>
-      <div class="form-errors" role="alert">
-        <ul>
-          <% @user.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <%= error_messages_for @user %>
     <div class="field">
       <%= form.label :name, "Your name" %>
       <%= form.text_field :name, required: true, autofocus: true, maxlength: 80, autocomplete: "name" %>

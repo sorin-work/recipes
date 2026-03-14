@@ -1,13 +1,5 @@
 <%= form_with model: pantry_item, class: "form form--inline" do |form| %>
-  <% if pantry_item.errors.any? %>
-    <div class="form-errors" role="alert">
-      <ul>
-        <% pantry_item.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= error_messages_for pantry_item %>
   <div class="field">
     <%= form.label :name, "Item" %>
     <%= form.text_field :name, required: true, maxlength: 100, placeholder: "e.g. plain flour" %>

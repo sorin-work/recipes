@@ -25,4 +25,9 @@ class PantryItemTest < ActiveSupport::TestCase
     assert_not users(:one).pantry_items.new(name: "Salt").valid?
     assert users(:two).pantry_items.new(name: "Salt").valid?
   end
+
+  test "names match the way the grocery list matches them" do
+    assert_not users(:one).pantry_items.new(name: "salts").valid?
+    assert_equal "egg", PantryItem.new(name: "Large Eggs").tap(&:validate).name_key
+  end
 end

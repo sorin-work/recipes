@@ -120,6 +120,13 @@ class GroceryListTest < ActiveSupport::TestCase
     assert_equal "1 2/3 tbsp", item("olive oil").amount_text
   end
 
+  test "pantry items match plurals and descriptions" do
+    plan recipes(:pancakes)
+    @user.pantry_items.create!(name: "Eggs", amount_text: "12")
+
+    assert_includes list.in_pantry.map(&:name), "egg"
+  end
+
   test "plain text version" do
     plan recipes(:pasta)
     text = list.to_text

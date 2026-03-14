@@ -1,9 +1,11 @@
 salt:
   user: one
   name: salt
+  name_key: salt
 
 flour:
   user: one
   name: plain flour
   quantity: 1
   unit: kg
+  name_key: plain flour

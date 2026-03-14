@@ -4,9 +4,10 @@ class PantryItem < ApplicationRecord
   belongs_to :user
 
   normalizes :name, with: ->(name) { name.squish }
+  before_validation -> { self.name_key = IngredientName.key(name) }
 
   validates :name, presence: true, length: { maximum: 100 }
-  validates :name, uniqueness: { scope: :user_id, case_sensitive: false }
+  validates :name_key, uniqueness: { scope: :user_id, message: "is already in your pantry" }
   validates :quantity, numericality: { greater_than: 0, less_than: 100_000 }, allow_nil: true
   validates :unit, inclusion: { in: ->(_) { Unit.codes }, message: "isn't a unit we know (try g, ml, tsp, cup or can)" },
     allow_nil: true
@@ -31,7 +32,7 @@ class PantryItem < ApplicationRecord
   end
 
   def key
-    name.downcase
+    name_key.presence || IngredientName.key(name)
   end
 
   # Lets the form take "500 g" or "2 cans" in one field.

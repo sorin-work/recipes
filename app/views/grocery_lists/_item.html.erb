@@ -8,6 +8,9 @@
     <noscript><%= form.submit item.checked ? "Untick" : "Tick", class: "button button--small" %></noscript>
   <% end %>
   <span class="grocery-item__amount"><%= item.amount_text %></span>
+  <%= button_to "In pantry", pantry_items_path, params: { pantry_item: { name: item.name } },
+        class: "button button--small button--quiet grocery-item__have",
+        title: "Add #{item.name} to your pantry as a staple" %>
   <% if item.pantry_item && !item.pantry_item.staple? %>
     <span class="grocery-item__pantry muted">(you have <%= item.pantry_item.amount %>)</span>
   <% end %>

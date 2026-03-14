@@ -40,4 +40,9 @@ class PantryItemsControllerTest < ActionDispatch::IntegrationTest
       delete pantry_item_path(pantry_items(:salt))
     end
   end
+
+  test "adding from the grocery list goes back to it" do
+    post pantry_items_path, params: { pantry_item: { name: "soy sauce" } }, headers: { "Referer" => grocery_list_url }
+    assert_redirected_to grocery_list_url
+  end
 end

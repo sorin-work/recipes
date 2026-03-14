@@ -14,7 +14,7 @@ class PantryItemsController < ApplicationController
     @pantry_item = Current.user.pantry_items.new(pantry_item_params)
 
     if @pantry_item.save
-      redirect_to pantry_items_path, notice: "Added #{@pantry_item.name} to the pantry.", status: :see_other
+      redirect_back_or_to pantry_items_path, notice: "Added #{@pantry_item.name} to the pantry.", status: :see_other
     else
       @pantry_items = Current.user.pantry_items.alphabetical
       render :index, status: :unprocessable_entity

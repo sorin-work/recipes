@@ -58,6 +58,19 @@
   font-variant-numeric: tabular-nums;
 }
 
+.grocery-item__recipes,
+.grocery-item__pantry {
+  flex-basis: 100%;
+  font-size: 0.8rem;
+  padding-left: 1.6rem;
+}
+
+.grocery-item__have {
+  margin-left: var(--space-2);
+  padding: 0.1rem 0.4rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
 
 .grocery-item__remove {
   margin-left: auto;

@@ -14,4 +14,5 @@
   <% if item.pantry_item && !item.pantry_item.staple? %>
     <span class="grocery-item__pantry muted">(you have <%= item.pantry_item.amount %>)</span>
   <% end %>
+  <span class="grocery-item__recipes muted">for <%= item.recipes.to_sentence %></span>
 </li>

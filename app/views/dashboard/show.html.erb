@@ -53,5 +53,21 @@
       <% end %>
     </section>
 
+    <% if @favourites.any? %>
+      <section class="dashboard__recipes" aria-labelledby="favourites-heading">
+        <h2 id="favourites-heading">Favourites</h2>
+        <ul class="card-grid card-grid--compact">
+          <%= render partial: "recipes/card", collection: @favourites, as: :recipe %>
+        </ul>
+      </section>
+    <% end %>
+
+    <section class="dashboard__recipes" aria-labelledby="recent-heading">
+      <h2 id="recent-heading">Recently added</h2>
+      <ul class="card-grid card-grid--compact">
+        <%= render partial: "recipes/card", collection: @recent, as: :recipe %>
+      </ul>
+      <p><%= link_to "All #{pluralize(@recipe_count, 'recipe')} →", recipes_path %></p>
+    </section>
   </div>
 <% end %>

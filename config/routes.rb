@@ -27,5 +27,5 @@ Rails.application.routes.draw do
   resources :grocery_extras, only: %i[ create update destroy ], path: "groceries/extras"
   resources :pantry_items, except: %i[ show ], path: "pantry"
 
-  root "recipes#index"
+  root "dashboard#show"
 end

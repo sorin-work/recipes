@@ -1,0 +1,57 @@
+<% content_for :title, "Home" %>
+
+<div class="page-header">
+  <h1>Hi <%= Current.user.first_name %></h1>
+  <p class="muted"><%= Date.current.strftime("%A %-d %B") %></p>
+</div>
+
+<% if @recipe_count.zero? %>
+  <section class="empty-state">
+    <h2>Let's get your recipe box started</h2>
+    <p>Add the recipes you cook most, plan them into your week and get a grocery list that adds everything up.</p>
+    <p>
+      <%= link_to "Add a recipe", new_recipe_path, class: "button button--primary" %>
+      <%= link_to "Paste one in", new_recipe_import_path, class: "button" %>
+    </p>
+  </section>
+<% else %>
+  <div class="dashboard">
+    <section class="card dashboard__today" aria-labelledby="today-heading">
+      <h2 id="today-heading">Today</h2>
+      <% if @today.any? %>
+        <ul class="meal-list">
+          <% @today.each do |entry| %>
+            <li>
+              <span class="meal-list__meal"><%= entry.meal.capitalize %></span>
+              <%= link_to entry.recipe.title, recipe_path(entry.recipe, servings: entry.servings) %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="muted">Nothing planned for today. <%= link_to "Open the planner", plan_path %>.</p>
+      <% end %>
+    </section>
+
+    <section class="card dashboard__week" aria-labelledby="week-heading">
+      <h2 id="week-heading">This week</h2>
+      <p class="stat"><strong><%= @planned_days %></strong> of 7 days planned</p>
+      <p class="stat"><strong><%= @to_buy %></strong> <%= "item".pluralize(@to_buy) %> left to buy</p>
+      <p>
+        <%= link_to "Planner", plan_path, class: "button" %>
+        <%= link_to "Grocery list", grocery_list_path, class: "button" %>
+      </p>
+      <% if @coming_up.any? %>
+        <h3>Coming up</h3>
+        <ul class="meal-list">
+          <% @coming_up.first(5).each do |entry| %>
+            <li>
+              <span class="meal-list__meal"><%= entry.on.strftime("%a") %> <%= entry.meal %></span>
+              <%= link_to entry.recipe.title, recipe_path(entry.recipe, servings: entry.servings) %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </section>
+
+  </div>
+<% end %>

@@ -1,0 +1,51 @@
+/* Home page */
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+
+.dashboard__recipes {
+  grid-column: 1 / -1;
+  margin-top: var(--space-4);
+}
+
+@media (max-width: 760px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}
+
+.meal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-3);
+}
+
+.meal-list li {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.meal-list li:last-child {
+  border-bottom: none;
+}
+
+.meal-list__meal {
+  min-width: 6rem;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  text-transform: capitalize;
+}
+
+.stat {
+  margin: 0 0 var(--space-2);
+}
+
+.stat strong {
+  font-size: 1.4rem;
+  font-family: var(--font-heading);
+}

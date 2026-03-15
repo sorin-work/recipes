@@ -26,6 +26,7 @@
         <%= link_to "Recipes", root_path, class: "brand" %>
         <% if authenticated? %>
           <nav class="site-nav" id="site-nav" aria-label="Main">
+            <%= nav_link "Home", root_path %>
             <%= nav_link "Recipes", recipes_path %>
             <%= nav_link "Planner", plan_path %>
             <%= nav_link "Groceries", grocery_list_path %>

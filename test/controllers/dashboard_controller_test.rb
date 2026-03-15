@@ -13,6 +13,17 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_select ".dashboard__week .stat", /1\s+of 7 days planned/
   end
 
+  test "ticked grocery items don't count as left to buy" do
+    user = users(:one)
+    user.meal_plan_entries.create!(recipe: recipes(:pasta), on: Date.current, meal: "dinner")
+    user.pantry_items.delete_all
+    user.grocery_checks.create!(week_start: Week.current.start, item_key: "spaghetti")
+    sign_in_as user
+
+    get root_path
+    assert_select ".dashboard__week .stat", /2\s+items left to buy/
+  end
+
   test "a new account sees how to start" do
     user = User.create!(name: "New Cook", email_address: "new@example.com", password: "long-password")
     sign_in_as user

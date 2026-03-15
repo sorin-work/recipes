@@ -8,6 +8,6 @@ class DashboardController < ApplicationController
     @favourites = Current.user.recipes.favourites.order(:title).limit(6)
     @recent = Current.user.recipes.order(created_at: :desc).limit(6)
     @recipe_count = Current.user.recipes.count
-    @to_buy = GroceryList.new(Current.user, @week).to_buy.count
+    @to_buy = GroceryList.new(Current.user, @week).to_buy.count { |item| !item.checked }
   end
 end

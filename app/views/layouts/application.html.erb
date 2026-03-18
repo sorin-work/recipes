@@ -32,7 +32,7 @@
             <%= nav_link "Groceries", grocery_list_path %>
             <%= nav_link "Pantry", pantry_items_path %>
             <div class="site-nav__account">
-              <span class="site-nav__user"><%= Current.user.name.presence || Current.user.email_address %></span>
+              <%= link_to Current.user.name.presence || Current.user.email_address, edit_account_path, class: "site-nav__user" %>
               <%= button_to "Sign out", session_path, method: :delete, class: "button button--quiet button--small" %>
             </div>
           </nav>

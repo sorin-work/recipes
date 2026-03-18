@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
   resource :registration, only: %i[ new create ]
   resource :account, only: %i[ edit update destroy ]
+  resource :password_change, only: %i[ update ], path: "account/password"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

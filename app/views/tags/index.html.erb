@@ -1,0 +1,40 @@
+<% content_for :title, "Tags" %>
+
+<div class="page-header">
+  <h1>Tags</h1>
+</div>
+
+<% if @tags.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Tag</th>
+        <th scope="col">Recipes</th>
+        <th scope="col"><span class="visually-hidden">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @tags.each do |tag| %>
+        <tr id="<%= dom_id(tag) %>">
+          <td>
+            <%= form_with model: tag, class: "form form--inline" do |form| %>
+              <%= form.label :name, "Name", for: dom_id(tag, :name), class: "visually-hidden" %>
+              <%= form.text_field :name, id: dom_id(tag, :name), maxlength: 40, required: true %>
+              <%= form.submit "Rename", class: "button button--small" %>
+            <% end %>
+          </td>
+          <td><%= link_to pluralize(tag.recipes_count, "recipe"), recipes_path(tag: tag.name) %></td>
+          <td class="table__actions">
+            <%= button_to "Delete", tag_path(tag), method: :delete, class: "button button--small button--quiet",
+                  form: { data: { turbo_confirm: "Delete the #{tag.name} tag? Recipes keep everything else." } } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="empty-state">
+    <h2>No tags yet</h2>
+    <p>Add tags like <em>quick</em> or <em>vegetarian</em> when you edit a recipe.</p>
+  </div>
+<% end %>

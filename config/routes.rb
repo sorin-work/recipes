@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resource :favourite, only: %i[ create destroy ], module: :recipes
     resource :duplicate, only: %i[ create ], module: :recipes
   end
+  resources :tags, only: %i[ index update destroy ]
 
   resource :plan, only: %i[ show ] do
     post :copy_previous_week

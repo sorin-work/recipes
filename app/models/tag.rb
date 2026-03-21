@@ -12,4 +12,12 @@ class Tag < ApplicationRecord
   def self.normalize_name(name)
     name.to_s.squish.downcase
   end
+
+  # Tags with how many recipes use them, most used first.
+  def self.with_recipe_counts
+    left_joins(:taggings)
+      .group(:id)
+      .select("tags.*, COUNT(taggings.id) AS recipes_count")
+      .order(Arel.sql("COUNT(taggings.id) DESC"), :name)
+  end
 end

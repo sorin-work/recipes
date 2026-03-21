@@ -16,4 +16,9 @@ class TagTest < ActiveSupport::TestCase
     recipe = users(:one).recipes.create!(title: "Wrap", servings: 1, tag_list: "Quick, QUICK")
     assert_equal [ tags(:quick) ], recipe.tags.to_a
   end
+
+  test "with_recipe_counts" do
+    counts = users(:one).tags.with_recipe_counts.to_h { |tag| [ tag.name, tag.recipes_count ] }
+    assert_equal({ "breakfast" => 1, "quick" => 1 }, counts)
+  end
 end

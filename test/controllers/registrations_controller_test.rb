@@ -7,6 +7,12 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_select "form input[name='user[name]']"
   end
 
+  test "signed in users go to the home page" do
+    sign_in_as users(:one)
+    get new_registration_path
+    assert_redirected_to root_path
+  end
+
   test "signing up creates an account and signs in" do
     assert_difference -> { User.count } do
       post registration_path, params: { user: {

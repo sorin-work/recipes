@@ -39,4 +39,17 @@
       <%= form.submit "Change password", class: "button" %>
     <% end %>
   </section>
+
+  <section class="card card--danger" aria-labelledby="delete-heading">
+    <h2 id="delete-heading">Delete account</h2>
+    <p>This deletes your account, every recipe, your meal plans and your pantry. It can't be undone.</p>
+    <%= form_with url: account_path, method: :delete, class: "form form--inline",
+          data: { turbo_confirm: "Delete your account and everything in it?" } do |form| %>
+      <div class="field">
+        <%= label_tag :password, "Your password" %>
+        <%= password_field_tag :password, nil, required: true, autocomplete: "current-password" %>
+      </div>
+      <%= form.submit "Delete my account", class: "button button--danger" %>
+    <% end %>
+  </section>
 </div>

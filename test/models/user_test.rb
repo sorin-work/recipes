@@ -33,4 +33,13 @@ class UserTest < ActiveSupport::TestCase
     user.name = " "
     assert_not user.valid?
   end
+
+  test "deleting a user deletes their recipes, plan and pantry" do
+    user = users(:one)
+    user.meal_plan_entries.create!(recipe: recipes(:pasta), on: Date.current, meal: "dinner")
+
+    assert_difference -> { Recipe.count } => -2, -> { MealPlanEntry.count } => -1, -> { PantryItem.count } => -2 do
+      user.destroy!
+    end
+  end
 end

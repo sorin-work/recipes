@@ -244,6 +244,9 @@ code {
   box-shadow: var(--shadow);
 }
 
+.card--danger {
+  border-color: var(--color-danger);
+}
 
 .empty-state {
   text-align: center;

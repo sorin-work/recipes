@@ -103,6 +103,13 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".recipe-card__title", count: 1, text: "Fluffy Pancakes"
   end
 
+  test "tags without recipes are not offered as filters" do
+    @user.tags.create!(name: "abandoned")
+    get recipes_path
+    assert_select "select[name=tag] option", text: "breakfast"
+    assert_select "select[name=tag] option", text: "abandoned", count: 0
+  end
+
   test "favourites only" do
     get recipes_path(favourites: "1")
     assert_select ".recipe-card__title", count: 1, text: "Fluffy Pancakes"

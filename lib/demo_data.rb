@@ -1,5 +1,6 @@
 # Sample account for trying the app: demo@example.com / demo-password with a
-# recipe box and this week and last week planned.
+# recipe box, this week and last week planned, a pantry and a few ticked-off
+# grocery items.
 # Run with SEED_DEMO=true bin/rails db:seed.
 #
 # Safe to run more than once: an existing demo account is left alone.
@@ -291,6 +292,12 @@ class DemoData
     [ 6, "breakfast", "Pancakes", 4 ]
   ].freeze
 
+  PANTRY = [
+    [ "salt", nil ], [ "black pepper", nil ], [ "olive oil", nil ], [ "vegetable oil", nil ],
+    [ "plain flour", "1 kg" ], [ "basmati rice", "500 g" ], [ "garlic", "6 cloves" ],
+    [ "dried oregano", nil ], [ "ground cumin", nil ], [ "smoked paprika", nil ],
+    [ "soy sauce", nil ], [ "honey", nil ], [ "onion", "2" ]
+  ].freeze
 
   def self.load
     new.load
@@ -304,6 +311,10 @@ class DemoData
       recipes = create_recipes(user)
       plan(user, recipes, Week.current, THIS_WEEK)
       plan(user, recipes, Week.current.previous, LAST_WEEK)
+      PANTRY.each { |name, amount| user.pantry_items.create!(name: name, amount_text: amount) }
+      user.grocery_checks.create!(week_start: Week.current.start, item_key: "spaghetti")
+      user.grocery_extras.create!(week_start: Week.current.start, name: "coffee beans")
+      user.grocery_extras.create!(week_start: Week.current.start, name: "kitchen roll", checked: true)
       user
     end
   end

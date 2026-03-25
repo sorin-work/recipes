@@ -4,11 +4,6 @@ Rails.application.routes.draw do
   resource :registration, only: %i[ new create ]
   resource :account, only: %i[ edit update destroy ]
   resource :password_change, only: %i[ update ], path: "account/password"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
 
   resources :recipes do
     collection do
@@ -29,6 +24,9 @@ Rails.application.routes.draw do
   resource :grocery_check, only: %i[ create destroy ], path: "groceries/check"
   resources :grocery_extras, only: %i[ create update destroy ], path: "groceries/extras"
   resources :pantry_items, except: %i[ show ], path: "pantry"
+
+  # Liveness and database check for docker and uptime monitors.
+  get "up" => "health#show", as: :health_check
 
   root "dashboard#show"
 end

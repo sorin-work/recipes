@@ -1,6 +1,8 @@
 name: recipes
 
-# Postgres for local development. Start it with `docker compose up -d db`.
+# `docker compose up --build` runs the app on http://localhost:4402 with a demo
+# account (demo@example.com / demo-password). For local development without the
+# app container, start only the database: `docker compose up -d db`.
 services:
   db:
     image: postgres:17-alpine
@@ -18,5 +20,25 @@ services:
       timeout: 3s
       retries: 10
 
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-recipes}:${POSTGRES_PASSWORD:-recipes}@db:5432/${POSTGRES_DB:-recipes}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:-local-development-secret-change-me-0123456789abcdef0123456789abcdef}
+      APP_HOST: ${APP_HOST:-localhost}
+      APP_PORT: ${APP_PORT:-4402}
+      FORCE_SSL: ${FORCE_SSL:-false}
+      RAILS_LOG_LEVEL: ${RAILS_LOG_LEVEL:-info}
+      # Creates demo@example.com / demo-password with sample recipes and a planned week.
+      SEED_DEMO: ${SEED_DEMO:-true}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-4402}:3000"
+    volumes:
+      - storage:/rails/storage
+
 volumes:
   db-data:
+  storage:

@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: RuboCop
+        run: bin/rubocop -f github
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: recipes
+          POSTGRES_PASSWORD: recipes
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U recipes"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      RAILS_ENV: test
+      CI: true
+      DATABASE_HOST: localhost
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: recipes
+      DATABASE_PASSWORD: recipes
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Prepare database
+        run: bin/rails db:test:prepare
+
+      - name: Rails tests
+        run: bin/rails test
+
+
+  javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm test

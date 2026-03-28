@@ -3,6 +3,11 @@
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   ./bin/rails db:prepare
+  # db:prepare only seeds a database it just created; run the (idempotent)
+  # demo seed every time so it also lands in an existing volume.
+  if [ "${SEED_DEMO}" == "true" ]; then
+    ./bin/rails db:seed
+  fi
 fi
 
 exec "${@}"

@@ -18,6 +18,15 @@ jobs:
       - name: RuboCop
         run: bin/rubocop -f github
 
+      - name: Brakeman
+        run: bin/brakeman --no-pager --quiet --exit-on-warn
+
+      - name: Gem audit
+        run: bin/bundler-audit
+
+      - name: Importmap audit
+        run: bin/importmap audit
+
   test:
     runs-on: ubuntu-latest
     services:

@@ -62,6 +62,8 @@ jobs:
       - name: Rails tests
         run: bin/rails test
 
+      - name: Demo seed
+        run: SEED_DEMO=true bin/rails db:seed
 
   javascript:
     runs-on: ubuntu-latest

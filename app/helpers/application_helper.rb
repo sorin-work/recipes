@@ -13,6 +13,11 @@ module ApplicationHelper
     [ ("#{hours} hr" if hours.positive?), ("#{mins} min" if mins.positive? || hours.zero?) ].compact.join(" ")
   end
 
+  def title(text)
+    content_for(:title, text)
+    text
+  end
+
   def error_messages_for(record)
     render "shared/form_errors", record: record if record.errors.any?
   end

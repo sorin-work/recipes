@@ -40,12 +40,8 @@
       </div>
     </header>
 
-    <div class="flash-area">
-      <% flash.each do |type, message| %>
-        <div class="flash flash--<%= type == "alert" ? "alert" : "notice" %>" role="<%= type == "alert" ? "alert" : "status" %>">
-          <%= message %>
-        </div>
-      <% end %>
+    <div class="flash-area" id="flash">
+      <%= render "layouts/flash" %>
     </div>
 
     <main id="main" class="main <%= content_for(:main_class) %>">

@@ -1,0 +1,7 @@
+<% flash.each do |type, message| %>
+  <% kind = type.to_s == "alert" ? "alert" : "notice" %>
+  <div class="flash flash--<%= kind %>" role="<%= kind == "alert" ? "alert" : "status" %>" data-controller="flash">
+    <span><%= message %></span>
+    <button type="button" class="flash__close" data-action="flash#dismiss" aria-label="Dismiss">×</button>
+  </div>
+<% end %>

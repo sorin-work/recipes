@@ -294,11 +294,25 @@ code {
   border-radius: var(--radius-small);
   margin-bottom: var(--space-2);
   background: var(--color-notice-bg);
+  transition: opacity 0.2s ease;
 }
 
 .flash--alert {
   background: var(--color-danger-bg);
   color: var(--color-danger);
+}
+
+.flash.is-leaving {
+  opacity: 0;
+}
+
+.flash__close {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: inherit;
+  cursor: pointer;
 }
 
 /* Buttons */

@@ -9,7 +9,8 @@
     <div class="recipe__actions">
       <%= link_to "Edit", edit_recipe_path(@recipe), class: "button" %>
       <%= button_to "Duplicate", recipe_duplicate_path(@recipe), class: "button" %>
-      <%= button_to "Delete", @recipe, method: :delete, class: "button button--danger" %>
+      <%= button_to "Delete", @recipe, method: :delete, class: "button button--danger",
+            form: { data: { turbo_confirm: "Delete #{@recipe.title}? This can't be undone." } } %>
     </div>
   </header>
 

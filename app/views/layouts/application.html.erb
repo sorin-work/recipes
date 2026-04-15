@@ -21,11 +21,16 @@
   </head>
 
   <body class="<%= content_for(:body_class) %>">
-    <header class="site-header">
+    <header class="site-header" data-controller="nav">
       <div class="site-header__inner">
         <%= link_to "Recipes", root_path, class: "brand" %>
         <% if authenticated? %>
-          <nav class="site-nav" id="site-nav" aria-label="Main">
+          <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav"
+                  data-action="nav#toggle" data-nav-target="button">
+            <span class="visually-hidden">Menu</span>
+            <span class="nav-toggle__bars" aria-hidden="true"></span>
+          </button>
+          <nav class="site-nav" id="site-nav" aria-label="Main" data-nav-target="menu">
             <%= nav_link "Home", root_path %>
             <%= nav_link "Recipes", recipes_path %>
             <%= nav_link "Planner", plan_path %>

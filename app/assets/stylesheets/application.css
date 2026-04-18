@@ -34,6 +34,26 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1b1815;
+    --color-surface: #25211d;
+    --color-surface-muted: #2e2924;
+    --color-text: #f1ebe4;
+    --color-text-muted: #b3a89c;
+    --color-border: #3d362f;
+    --color-primary: #e2734d;
+    --color-primary-hover: #f08a65;
+    --color-primary-text: #1b1815;
+    --color-accent: #8dbb86;
+    --color-danger: #f38b7f;
+    --color-danger-bg: #3a201d;
+    --color-notice-bg: #1f3220;
+    --color-focus: #7aa7f0;
+    --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 4px 12px rgb(0 0 0 / 25%);
+  }
+}
+
 *,
 *::before,
 *::after {

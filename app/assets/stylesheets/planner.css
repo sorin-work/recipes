@@ -176,3 +176,30 @@
   font-size: 0.8rem;
   padding: 0.25rem;
 }
+
+/* On phones the week becomes a list of days with the recipes underneath. */
+@media (max-width: 900px) {
+  .planner--with-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .planner__sidebar {
+    position: static;
+    max-height: 14rem;
+    order: 2;
+  }
+
+  .planner__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .planner__day {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-1);
+  }
+
+  .planner__day-name {
+    grid-column: 1 / -1;
+  }
+}

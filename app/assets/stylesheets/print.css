@@ -6,6 +6,10 @@
   .skip-link,
   .page-header__actions,
   .week-nav .button,
+  .recipe__actions,
+  .favourite,
+  .add-to-plan,
+  .servings,
   .grocery-actions,
   .grocery-extras__form,
   .grocery-item__have,
@@ -43,6 +47,14 @@
     width: 0.9em;
     height: 0.9em;
     border: 1px solid #000;
+  }
+
+  .recipe__body {
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .recipe__photo {
+    max-height: 8cm;
   }
 
   a {

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     end
     resource :favourite, only: %i[ create destroy ], module: :recipes
     resource :duplicate, only: %i[ create ], module: :recipes
+    resource :cook, only: %i[ show ], module: :recipes, controller: :cook
   end
   resources :tags, only: %i[ index update destroy ]
 

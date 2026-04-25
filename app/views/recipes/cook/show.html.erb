@@ -1,0 +1,47 @@
+<% content_for :title, "Cooking #{@recipe.title}" %>
+<% content_for :body_class, "cook-mode" %>
+
+<div class="cook" data-controller="cook" data-action="keydown@document->cook#keydown">
+  <header class="cook__header">
+    <%= link_to "← Back to recipe", recipe_path(@recipe, servings: @servings), class: "button button--quiet" %>
+    <h1><%= @recipe.title %></h1>
+    <p class="cook__status muted" data-cook-target="status" aria-live="polite"></p>
+  </header>
+
+  <div class="cook__body">
+    <section class="cook__ingredients" aria-labelledby="cook-ingredients">
+      <h2 id="cook-ingredients">Ingredients <span class="muted">for <%= @servings %></span></h2>
+      <ul class="ingredients ingredients--checklist">
+        <% @recipe.ingredients.each do |ingredient| %>
+          <li>
+            <label class="checkbox">
+              <input type="checkbox">
+              <span><%= ingredient.to_line(@scale) %></span>
+            </label>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+
+    <section class="cook__steps" aria-labelledby="cook-steps">
+      <h2 id="cook-steps" class="visually-hidden">Method</h2>
+      <% if @recipe.steps.any? %>
+        <ol class="cook__step-list">
+          <% @recipe.steps.each_with_index do |step, index| %>
+            <li class="cook__step<%= ' is-current' if index.zero? %>" data-cook-target="step" data-action="click->cook#select">
+              <span class="cook__step-number">Step <%= index + 1 %> of <%= @recipe.steps.size %></span>
+              <p><%= step.body %></p>
+            </li>
+          <% end %>
+        </ol>
+        <div class="cook__nav">
+          <button type="button" class="button" data-action="cook#previous" data-cook-target="previous">Previous</button>
+          <button type="button" class="button button--primary" data-action="cook#next" data-cook-target="next">Next step</button>
+        </div>
+        <p class="hint">Use the arrow keys or space to move between steps.</p>
+      <% else %>
+        <p class="muted">This recipe has no steps yet.</p>
+      <% end %>
+    </section>
+  </div>
+</div>

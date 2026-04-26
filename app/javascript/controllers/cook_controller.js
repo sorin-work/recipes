@@ -59,7 +59,17 @@ export default class extends Controller {
     if (this.hasNextTarget) this.nextTarget.disabled = this.index >= count - 1
   }
 
+  // Not every browser has the Screen Wake Lock API, and it is refused when the
+  // tab is hidden or the battery is low. Cook mode works without it.
   async keepAwake() {
-    this.wakeLock = await navigator.wakeLock.request("screen")
+    if (!("wakeLock" in navigator) || this.wakeLock) return
+    try {
+      this.wakeLock = await navigator.wakeLock.request("screen")
+      this.wakeLock.addEventListener("release", () => {
+        this.wakeLock = null
+      })
+    } catch {
+      this.wakeLock = null
+    }
   }
 }

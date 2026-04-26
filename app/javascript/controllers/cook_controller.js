@@ -37,6 +37,8 @@ export default class extends Controller {
   }
 
   keydown(event) {
+    // Space on a focused ingredient checkbox or button should do its own thing.
+    if (event.target.closest("input, textarea, select, button, a")) return
 
     if (event.key === "ArrowRight" || event.key === "ArrowDown" || event.key === " ") {
       event.preventDefault()

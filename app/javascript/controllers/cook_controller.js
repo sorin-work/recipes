@@ -7,7 +7,7 @@ export default class extends Controller {
 
   connect() {
     this.index = 0
-    this.show()
+    this.show({ scroll: false })
     this.keepAwake()
     this.onVisibilityChange = () => {
       if (document.visibilityState === "visible") this.keepAwake()
@@ -49,13 +49,13 @@ export default class extends Controller {
     }
   }
 
-  show() {
+  show({ scroll = true } = {}) {
     const count = this.stepTargets.length
     this.stepTargets.forEach((step, i) => {
       step.classList.toggle("is-current", i === this.index)
       step.classList.toggle("is-done", i < this.index)
     })
-    this.stepTargets[this.index]?.scrollIntoView({ block: "center", behavior: "smooth" })
+    if (scroll) this.stepTargets[this.index]?.scrollIntoView({ block: "center", behavior: "smooth" })
     if (this.hasStatusTarget) this.statusTarget.textContent = stepStatus(this.index, count)
     if (this.hasPreviousTarget) this.previousTarget.disabled = this.index === 0
     if (this.hasNextTarget) this.nextTarget.disabled = this.index >= count - 1

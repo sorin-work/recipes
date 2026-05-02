@@ -10,6 +10,12 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::ParameterMissing, with: :render_bad_request
 
   private
+    # ?servings= from the recipe and cook pages, or the recipe's own servings.
+    def requested_servings(recipe)
+      servings = params[:servings].to_i
+      servings.between?(1, 100) ? servings : recipe.servings
+    end
+
     def render_not_found
       respond_to do |format|
         format.html { render "errors/not_found", status: :not_found }

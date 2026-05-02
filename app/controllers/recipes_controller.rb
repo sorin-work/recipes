@@ -15,7 +15,7 @@ class RecipesController < ApplicationController
   end
 
   def show
-    @servings = params[:servings].to_i.between?(1, 100) ? params[:servings].to_i : @recipe.servings
+    @servings = requested_servings(@recipe)
     @scale = @recipe.scale_for(@servings)
   end
 

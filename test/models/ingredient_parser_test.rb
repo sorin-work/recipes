@@ -78,4 +78,11 @@ class IngredientParserTest < ActiveSupport::TestCase
     assert_equal "tsp", parse("1 t salt").unit
     assert_equal "sugar", parse("1 T sugar").name
   end
+
+  test "a line ending in a colon is a heading" do
+    result = parse("For the sauce:")
+    assert result.heading?
+    assert_equal "For the sauce", result.name
+    assert_not parse("2 cups flour").heading?
+  end
 end

@@ -61,6 +61,10 @@
       <% if @recipe.ingredients.any? %>
         <ul class="ingredients">
           <% @recipe.ingredients.each do |ingredient| %>
+            <% if ingredient.heading? %>
+              <li class="ingredients__heading"><%= ingredient.name %></li>
+              <% next %>
+            <% end %>
             <li class="ingredient">
               <%= ingredient_amount(ingredient, @scale) %>
               <span class="ingredient__name"><%= ingredient.name %></span><% if ingredient.note.present? %><span class="ingredient__note">, <%= ingredient.note %></span><% end %>

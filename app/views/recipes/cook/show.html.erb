@@ -13,6 +13,10 @@
       <h2 id="cook-ingredients">Ingredients <span class="muted">for <%= @servings %></span></h2>
       <ul class="ingredients ingredients--checklist">
         <% @recipe.ingredients.each do |ingredient| %>
+          <% if ingredient.heading? %>
+            <li class="ingredients__heading"><%= ingredient.name %></li>
+            <% next %>
+          <% end %>
           <li>
             <label class="checkbox">
               <input type="checkbox">

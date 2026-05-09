@@ -107,7 +107,7 @@ class GroceryList
       by_key = {}
       entries.each do |entry|
         factor = entry.scale
-        entry.recipe.ingredients.each do |ingredient|
+        entry.recipe.ingredients.reject(&:heading?).each do |ingredient|
           key = IngredientName.key(ingredient.name)
           next if key.empty?
 

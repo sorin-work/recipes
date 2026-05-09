@@ -28,7 +28,10 @@
 
   <div class="field">
     <%= form.label :ingredients_text, "Ingredients" %>
-    <p class="hint" id="ingredients-hint">One per line, e.g. <code>200 g plain flour</code> or <code>1 onion, finely chopped</code>.</p>
+    <p class="hint" id="ingredients-hint">
+      One per line, e.g. <code>200 g plain flour</code> or <code>1 onion, finely chopped</code>.
+      A line ending in a colon, like <code>For the sauce:</code>, starts a group.
+    </p>
     <%= form.text_area :ingredients_text, rows: 10, class: "monospace", aria: { describedby: "ingredients-hint" } %>
   </div>
 

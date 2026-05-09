@@ -134,7 +134,10 @@ class Recipe < ApplicationRecord
       @parsed_ingredient_lines = nil
       ingredients.delete_all
       parsed_ingredient_lines.each.with_index(1) do |line, position|
-        ingredients.build(quantity: line.quantity, unit: line.unit, name: line.name, note: line.note, position: position)
+        ingredients.build(
+          quantity: line.quantity, unit: line.unit, name: line.name, note: line.note,
+          heading: line.heading?, position: position
+        )
       end
       @ingredients_text = nil
     end

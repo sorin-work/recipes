@@ -102,6 +102,11 @@
   color: var(--color-text-muted);
 }
 
+.ingredients__heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  padding: var(--space-3) 0 var(--space-1);
+}
 
 .steps {
   padding-left: var(--space-5);

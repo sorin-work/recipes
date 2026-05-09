@@ -6,6 +6,15 @@
 # Lines without a recognisable amount ("salt and pepper") keep a nil quantity.
 class IngredientParser
   Result = Data.define(:quantity, :unit, :name, :note) do
+    def heading? = false
+  end
+
+  # "For the sauce:" style lines that group the ingredients below them.
+  Heading = Data.define(:name) do
+    def heading? = true
+    def quantity = nil
+    def unit = nil
+    def note = nil
   end
 
   BULLET = /\A(?:[-*•·–]|\d+[.)](?=\s))\s*/
@@ -23,6 +32,7 @@ class IngredientParser
   def parse
     text = @line.squish.sub(BULLET, "")
     return if text.empty?
+    return Heading.new(name: text.delete_suffix(":").strip) if heading?(text)
 
     quantity, rest = Quantity.scan(text)
     notes = []
@@ -65,5 +75,9 @@ class IngredientParser
         note = [ bracket[2], note ].compact_blank.join(", ")
       end
       [ name.to_s, note.presence ]
+    end
+
+    def heading?(text)
+      text.end_with?(":") && text.length <= 60 && !text.match?(/\A[\d#{Quantity::VULGAR_FRACTIONS.keys.join}]/)
     end
 end

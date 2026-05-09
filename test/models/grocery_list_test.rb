@@ -127,6 +127,12 @@ class GroceryListTest < ActiveSupport::TestCase
     assert_includes list.in_pantry.map(&:name), "egg"
   end
 
+  test "headings are not groceries" do
+    recipe = @user.recipes.create!(title: "Tacos", servings: 4, ingredients_text: "For the salsa:\n2 tomatoes")
+    plan recipe
+    assert_equal [ "tomato" ], list.items.map(&:key)
+  end
+
   test "plain text version" do
     plan recipes(:pasta)
     text = list.to_text

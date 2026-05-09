@@ -6,6 +6,8 @@ class Ingredient < ApplicationRecord
   validates :unit, inclusion: { in: ->(_) { Unit.codes } }, allow_nil: true
   validates :quantity, numericality: { greater_than: 0, less_than: 100_000 }, allow_nil: true
 
+  scope :items, -> { where(heading: false) }
+
   def unit_object
     Unit.find(unit)
   end
@@ -17,6 +19,8 @@ class Ingredient < ApplicationRecord
 
   # "1 1/2 cups flour, sifted" - the line as it would be typed.
   def to_line(factor = 1)
+    return "#{name}:" if heading?
+
     [ amount(factor), name ].compact_blank.join(" ") + (note.present? ? ", #{note}" : "")
   end
 

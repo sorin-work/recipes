@@ -142,4 +142,12 @@ class RecipeTest < ActiveSupport::TestCase
       recipe.destroy!
     end
   end
+
+  test "heading lines are stored as headings" do
+    recipe = @user.recipes.create!(title: "Tacos", servings: 4,
+      ingredients_text: "For the salsa:\n2 tomatoes\nFor the tacos:\n8 tortillas")
+
+    assert_equal [ true, false, true, false ], recipe.ingredients.map(&:heading)
+    assert_equal "For the salsa:\n2 tomatoes\nFor the tacos:\n8 tortillas", recipe.reload.ingredients_text
+  end
 end

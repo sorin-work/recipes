@@ -32,6 +32,7 @@ class Recipe < ApplicationRecord
   validates :prep_minutes, :cook_minutes,
     numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2880 }, allow_nil: true
   validates :description, length: { maximum: 2000 }
+  validates :notes, length: { maximum: 5000 }
   validates :source_url, length: { maximum: 2000 }
   validate :photo_is_an_acceptable_image
   validate :ingredient_lines_are_reasonable

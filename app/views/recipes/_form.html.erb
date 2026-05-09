@@ -55,6 +55,12 @@
   </div>
 
   <div class="field">
+    <%= form.label :notes %>
+    <p class="hint" id="notes-hint">Tweaks, what to serve it with, what the kids thought.</p>
+    <%= form.text_area :notes, rows: 3, maxlength: 5000, aria: { describedby: "notes-hint" } %>
+  </div>
+
+  <div class="field">
     <%= form.label :photo %>
     <% if recipe.photo.attached? && recipe.persisted? %>
       <div class="photo-current">

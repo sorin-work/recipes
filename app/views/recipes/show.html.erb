@@ -86,5 +86,12 @@
     </section>
   </div>
 
+  <% if @recipe.notes.present? %>
+    <section class="recipe__notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">Notes</h2>
+      <%= simple_format @recipe.notes %>
+    </section>
+  <% end %>
+
   <%= render "recipes/add_to_plan", recipe: @recipe, servings: @servings %>
 </article>

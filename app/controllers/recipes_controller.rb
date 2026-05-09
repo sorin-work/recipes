@@ -58,6 +58,7 @@ class RecipesController < ApplicationController
     def recipe_params
       params.expect(recipe: [
         :source_url,
+        :notes,
         :ingredients_text,
         :steps_text,
         :tag_list,

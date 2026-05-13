@@ -20,6 +20,8 @@ class IngredientParser
   BULLET = /\A(?:[-*•·–]|\d+[.)](?=\s))\s*/
   # "1 (400 g) can tomatoes": the bracket describes the can, it isn't the amount.
   PACKAGE_SIZE = /\A\(([^)]*)\)\s*/
+  # "a few" or "a little" are not one of anything.
+  ARTICLE = /\A(?:a|an|one)\s+(?!(?:few|little|bit|couple|good|generous|splash|drizzle)\b)/i
 
   def self.parse(line)
     new(line).parse
@@ -35,6 +37,7 @@ class IngredientParser
     return Heading.new(name: text.delete_suffix(":").strip) if heading?(text)
 
     quantity, rest = Quantity.scan(text)
+    quantity, rest = article_quantity(rest) if quantity.nil?
     notes = []
     if quantity && (size = rest.match(PACKAGE_SIZE))
       notes << size[1].strip
@@ -75,6 +78,14 @@ class IngredientParser
         note = [ bracket[2], note ].compact_blank.join(", ")
       end
       [ name.to_s, note.presence ]
+    end
+
+    # "a pinch of salt", "an onion"
+    def article_quantity(text)
+      match = text.match(ARTICLE)
+      return [ nil, text ] unless match
+
+      [ 1r, match.post_match ]
     end
 
     def heading?(text)

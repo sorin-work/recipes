@@ -79,6 +79,16 @@ class IngredientParserTest < ActiveSupport::TestCase
     assert_equal "sugar", parse("1 T sugar").name
   end
 
+  test "'a' or 'an' means one" do
+    result = parse("a pinch of salt")
+    assert_equal 1, result.quantity
+    assert_equal "pinch", result.unit
+    assert_equal "salt", result.name
+
+    assert_equal 1, parse("an onion").quantity
+    assert_nil parse("a few sprigs of thyme").quantity
+  end
+
   test "a line ending in a colon is a heading" do
     result = parse("For the sauce:")
     assert result.heading?

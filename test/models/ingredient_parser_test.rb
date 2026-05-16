@@ -89,6 +89,14 @@ class IngredientParserTest < ActiveSupport::TestCase
     assert_nil parse("a few sprigs of thyme").quantity
   end
 
+  test "'2 x 400g tins' is two tins" do
+    result = parse("2 x 400g tins chickpeas")
+    assert_equal 2, result.quantity
+    assert_equal "can", result.unit
+    assert_equal "chickpeas", result.name
+    assert_equal "400 g", result.note
+  end
+
   test "a line ending in a colon is a heading" do
     result = parse("For the sauce:")
     assert result.heading?

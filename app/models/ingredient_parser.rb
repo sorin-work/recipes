@@ -22,6 +22,7 @@ class IngredientParser
   PACKAGE_SIZE = /\A\(([^)]*)\)\s*/
   # "a few" or "a little" are not one of anything.
   ARTICLE = /\A(?:a|an|one)\s+(?!(?:few|little|bit|couple|good|generous|splash|drizzle)\b)/i
+  MULTIPLIER = /\A[x×]\s*(?=\d)/i
 
   def self.parse(line)
     new(line).parse
@@ -42,6 +43,11 @@ class IngredientParser
     if quantity && (size = rest.match(PACKAGE_SIZE))
       notes << size[1].strip
       rest = size.post_match
+    end
+    # "2 x 400g tins" - two tins; the size goes in the note.
+    if quantity && (times = rest.match(MULTIPLIER))
+      size, rest = split_package(times.post_match)
+      notes << size if size
     end
 
     unit, rest = take_unit(rest) if quantity
@@ -86,6 +92,16 @@ class IngredientParser
       return [ nil, text ] unless match
 
       [ 1r, match.post_match ]
+    end
+
+    def split_package(text)
+      size, rest = Quantity.scan(text)
+      return [ nil, text ] unless size
+
+      unit, rest = take_unit(rest)
+      return [ nil, text ] unless unit
+
+      [ "#{Quantity.format(size, unit)} #{unit.code}", rest ]
     end
 
     def heading?(text)

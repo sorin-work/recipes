@@ -117,4 +117,9 @@ class RecipeImportTest < ActiveSupport::TestCase
     assert_equal "3 eggs\n1 tbsp butter", attributes[:ingredients_text]
     assert_equal "Whisk the eggs.\n\nCook slowly in the butter, stirring.", attributes[:steps_text]
   end
+
+  test "skips web page clutter" do
+    attributes = import("Tea\nJump to Recipe\nIngredients\n1 tea bag\nAdvertisement\nMethod\nBrew.").recipe_attributes
+    assert_equal "1 tea bag", attributes[:ingredients_text]
+  end
 end

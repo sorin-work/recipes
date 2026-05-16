@@ -20,6 +20,8 @@ class RecipeImport
   TOTAL_TIME = /\Atotal(?:\s+time\s*:?|\s*:)\s*(.+)\z/i
   URL = %r{\A(?:source\s*:\s*)?(https?://\S+)\z}i
   STEP_NUMBER = /\A(?:step\s*\d+\s*[:.)-]?|\d+\s*[.)-]|[-*•])\s*/i
+  # Bits of recipe web pages that come along when copying the whole page.
+  JUNK = /\A(?:advertisement|jump to recipe|print recipe|pin recipe|save recipe|rate this recipe|share)\z/i
 
   attribute :text, :string
 
@@ -48,6 +50,7 @@ class RecipeImport
 
       lines.each do |line|
         next if line.empty?
+        next if line.match?(JUNK)
 
         if line.match?(INGREDIENTS_HEADING)
           section = :ingredients

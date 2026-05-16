@@ -87,6 +87,10 @@ class Amount
     end
 
     def mass_unit
+      if systems == Set[:imperial]
+        return value >= Unit["lb"].factor ? Unit["lb"] : Unit["oz"]
+      end
+
       value >= 1000 ? Unit["kg"] : Unit["g"]
     end
 

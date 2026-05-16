@@ -46,4 +46,10 @@ class AmountTest < ActiveSupport::TestCase
     assert_equal "1 tbsp", (amount(1, "tsp") + amount(2, "tsp")).to_s
     assert_equal "1/4 cup", (amount(3, "tbsp") + amount(3, "tsp")).to_s
   end
+
+  test "ounces and pounds stay imperial" do
+    assert_equal "12 oz", (amount(8, "oz") + amount(4, "oz")).to_s
+    assert_equal "1 1/2 lb", (amount(1, "lb") + amount(8, "oz")).to_s
+    assert_equal "477 g", (amount(250, "g") + amount(8, "oz")).to_s
+  end
 end

@@ -134,6 +134,19 @@ class RecipeTest < ActiveSupport::TestCase
     assert recipe.valid?
   end
 
+  test "source url must be a web address" do
+    recipe = recipes(:pasta)
+    recipe.source_url = "javascript:alert(1)"
+    assert_not recipe.valid?
+
+    recipe.source_url = "https://example.com/garlic-spaghetti"
+    assert recipe.valid?
+
+    recipe.source_url = "  "
+    assert recipe.valid?
+    assert_nil recipe.source_url
+  end
+
   test "deleting a recipe removes it from the plan" do
     recipe = recipes(:pasta)
     recipe.user.meal_plan_entries.create!(recipe: recipe, on: Date.current, meal: "dinner")

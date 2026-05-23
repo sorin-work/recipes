@@ -16,6 +16,7 @@ module RecipesHelper
 
   def source_link(recipe)
     return if recipe.source_url.blank?
+    return recipe.source_url unless recipe.source_url.match?(%r{\Ahttps?://}i)
 
     host = URI.parse(recipe.source_url).host.to_s.delete_prefix("www.")
     link_to host.presence || recipe.source_url, recipe.source_url, rel: "noopener noreferrer nofollow", target: "_blank"

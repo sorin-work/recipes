@@ -33,7 +33,8 @@ class Recipe < ApplicationRecord
     numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2880 }, allow_nil: true
   validates :description, length: { maximum: 2000 }
   validates :notes, length: { maximum: 5000 }
-  validates :source_url, length: { maximum: 2000 }
+  validates :source_url, length: { maximum: 2000 },
+    format: { with: %r{\Ahttps?://[^\s]+\z}i, message: "must start with http:// or https://" }, allow_nil: true
   validate :photo_is_an_acceptable_image
   validate :ingredient_lines_are_reasonable
 

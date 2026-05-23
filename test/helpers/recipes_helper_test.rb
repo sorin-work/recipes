@@ -12,4 +12,8 @@ class RecipesHelperTest < ActionView::TestCase
     assert_dom_equal %(<a rel="noopener noreferrer nofollow" target="_blank" href="https://www.example.com/recipes/42">example.com</a>),
       source_link(recipe)
   end
+
+  test "source link refuses anything but http" do
+    assert_equal "javascript:alert(1)", source_link(Recipe.new(source_url: "javascript:alert(1)"))
+  end
 end

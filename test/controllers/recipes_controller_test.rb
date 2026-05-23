@@ -171,4 +171,10 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     patch recipe_path(@recipe), params: { recipe: { tag_list: "breakfast, weekend" } }
     assert_equal [ "breakfast", "weekend" ], @recipe.reload.tags.map(&:name)
   end
+
+  test "does not link to javascript urls" do
+    @recipe.update_column(:source_url, "javascript:alert(1)")
+    get recipe_path(@recipe)
+    assert_select "a[href^='javascript']", count: 0
+  end
 end

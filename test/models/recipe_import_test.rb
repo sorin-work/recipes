@@ -122,4 +122,9 @@ class RecipeImportTest < ActiveSupport::TestCase
     attributes = import("Tea\nJump to Recipe\nIngredients\n1 tea bag\nAdvertisement\nMethod\nBrew.").recipe_attributes
     assert_equal "1 tea bag", attributes[:ingredients_text]
   end
+
+  test "reads tags" do
+    attributes = import("Tea\nTags: drinks, quick\nIngredients\n1 tea bag").recipe_attributes
+    assert_equal "drinks, quick", attributes[:tag_list]
+  end
 end

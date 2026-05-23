@@ -19,6 +19,7 @@ class RecipeImport
   COOK_TIME = /\A(?:cook(?:ing)?|bake|baking)(?:\s+time\s*:?|\s*:)\s*(.+)\z/i
   TOTAL_TIME = /\Atotal(?:\s+time\s*:?|\s*:)\s*(.+)\z/i
   URL = %r{\A(?:source\s*:\s*)?(https?://\S+)\z}i
+  TAGS = /\A(?:tags|keywords|categories)\s*:\s*(.+)\z/i
   STEP_NUMBER = /\A(?:step\s*\d+\s*[:.)-]?|\d+\s*[.)-]|[-*•])\s*/i
   # Bits of recipe web pages that come along when copying the whole page.
   JUNK = /\A(?:advertisement|jump to recipe|print recipe|pin recipe|save recipe|rate this recipe|share)\z/i
@@ -96,6 +97,8 @@ class RecipeImport
         true
       elsif (match = line.match(URL))
         result[:source_url] ||= match[1]
+      elsif (match = line.match(TAGS))
+        result[:tag_list] ||= match[1]
       else
         false
       end

@@ -28,11 +28,16 @@
   <aside class="planner__sidebar" aria-labelledby="planner-recipes-heading">
     <h2 id="planner-recipes-heading">Recipes</h2>
     <p class="hint">Drag a recipe onto a day.</p>
+    <div data-controller="filter">
+      <label for="planner-filter" class="visually-hidden">Filter recipes</label>
+      <input type="search" id="planner-filter" placeholder="Filter" autocomplete="off"
+             data-filter-target="input" data-action="input->filter#filter">
     <ul class="planner__recipes">
       <% @recipes.each do |recipe| %>
         <li class="planner__recipe" draggable="true"
             data-drag-type="recipe" data-drag-id="<%= recipe.id %>"
-            data-action="dragstart->planner#dragstart dragend->planner#dragend">
+            data-action="dragstart->planner#dragstart dragend->planner#dragend"
+            data-filter-target="item" data-filter-text="<%= recipe.title %>">
           <%= "★ " if recipe.favourite? %><%= recipe.title %>
         </li>
       <% end %>
@@ -40,6 +45,7 @@
     <% if @recipes.empty? %>
       <p class="muted">No recipes yet. <%= link_to "Add one", new_recipe_path %>.</p>
     <% end %>
+    </div>
   </aside>
 
   <div class="planner__grid">

@@ -116,6 +116,10 @@ class Recipe < ApplicationRecord
     copy
   end
 
+  def last_planned_on
+    meal_plan_entries.where(on: ..Date.current).maximum(:on)
+  end
+
   private
     def parsed_ingredient_lines
       @parsed_ingredient_lines ||= @ingredients_text.to_s.lines.filter_map { |line| IngredientParser.parse(line) }

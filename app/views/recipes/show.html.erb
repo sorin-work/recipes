@@ -33,6 +33,9 @@
     <% if @recipe.source_url.present? %>
       <div><dt>From</dt><dd><%= source_link(@recipe) %></dd></div>
     <% end %>
+    <% if (last_planned = @recipe.last_planned_on) %>
+      <div><dt>Last planned</dt><dd><%= time_tag last_planned, last_planned.to_fs(:long) %></dd></div>
+    <% end %>
   </dl>
 
   <% if @recipe.tags.any? %>

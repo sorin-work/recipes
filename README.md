@@ -49,6 +49,39 @@ Stimulus) for the interactive parts, PostgreSQL for storage.
 | Lint      | RuboCop (rails-omakase), Brakeman, bundler-audit                      |
 | Ops       | Docker Compose, multi-stage Dockerfile, GitHub Actions                |
 
+## Architecture
+
+```
+browser ──HTTP──> app (Rails + Puma :3000) ──> db (Postgres :5432)
+                  HTML + Turbo streams         recipes, plans, pantry, sessions
+```
+
+A single Rails service renders every page. Turbo Drive handles navigation and form
+submissions; the planner and favourite buttons answer with Turbo streams that replace
+just the part of the page that changed, and the grocery list uses Turbo's morphing
+page refresh so ticking an item keeps your scroll position. Stimulus controllers in
+`app/javascript/controllers` add the browser-only behaviour (drag and drop, instant
+rescaling, search as you type). Their logic lives in plain modules under
+`app/javascript/lib` so it can be unit tested without a browser.
+
+The domain rules are plain Ruby objects in `app/models`, with no database access:
+
+| Class              | What it does                                                         |
+| ------------------ | -------------------------------------------------------------------- |
+| `Unit`             | Every unit we understand, its aliases and how it converts            |
+| `Quantity`         | Reads `1 1/2`, `½`, `0.5` and `2-3`; writes fractions or decimals    |
+| `IngredientParser` | Splits `2 tbsp olive oil, plus extra` into amount, unit, name, note  |
+| `IngredientName`   | Normalises names so plurals and descriptions match                   |
+| `Amount`           | Adds and subtracts quantities in grams, millilitres or counted units |
+| `GroceryList`      | Builds the week's list from the plan, the pantry and ticked items    |
+| `Aisle`            | Guesses which part of the shop an ingredient is in                   |
+| `RecipeImport`     | Turns pasted text into recipe attributes                             |
+| `DurationParser`   | Reads `1 hr 15 mins`, `90 minutes` or `PT45M`                        |
+| `Week`             | The Monday-to-Sunday week the planner and grocery list show          |
+
+Every query goes through `Current.user`, so one account can never see or change
+another's recipes, plans or pantry.
+
 ## Running with Docker
 
 ```bash

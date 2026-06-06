@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_09_150815) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_06_140132) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pg_trgm"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -71,6 +72,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_150815) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "heading", default: false, null: false
+    t.index ["name"], name: "index_ingredients_on_name_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["recipe_id"], name: "index_ingredients_on_recipe_id"
   end
 
@@ -110,6 +112,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_150815) do
     t.boolean "favourite", default: false, null: false
     t.string "source_url"
     t.text "notes"
+    t.index ["title"], name: "index_recipes_on_title_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["user_id", "favourite"], name: "index_recipes_on_user_id_and_favourite"
     t.index ["user_id"], name: "index_recipes_on_user_id"
   end

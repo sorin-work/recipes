@@ -133,6 +133,9 @@ class Recipe < ApplicationRecord
       if lines.any? { |line| line.name.length > 200 || line.note.to_s.length > 200 }
         errors.add(:ingredients_text, "has a line that is too long")
       end
+      if lines.any? { |line| line.quantity&.zero? }
+        errors.add(:ingredients_text, "has a quantity of zero")
+      end
     end
 
     def rebuild_ingredients

@@ -51,6 +51,12 @@ class RecipeTest < ActiveSupport::TestCase
     assert recipe.errors[:ingredients_text].any?
   end
 
+  test "says which problem a zero quantity is" do
+    recipe = @user.recipes.new(title: "Nothing", servings: 1, ingredients_text: "0 g sugar")
+    assert_not recipe.valid?
+    assert_includes recipe.errors[:ingredients_text], "has a quantity of zero"
+  end
+
   test "steps split on lines or blank lines" do
     recipe = @user.recipes.create!(title: "Tea", servings: 1, steps_text: "Boil water.\nPour.\nWait.")
     assert_equal [ "Boil water.", "Pour.", "Wait." ], recipe.steps.map(&:body)

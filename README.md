@@ -11,9 +11,10 @@ Stimulus) for the interactive parts, PostgreSQL for storage.
 ## Features
 
 - **Recipe box**: title, description, servings, prep and cook time, ingredients,
-  method, tags, an optional photo and a link to where it came from.
+  method, tags, an optional photo, a link to where it came from and your own notes.
   Ingredients are typed one per line (`200 g plain flour`, `1 onion, finely chopped`)
   and split into quantity, unit, name and note.
+  Lines ending in a colon (`For the sauce:`) start a group.
 - **Scaling**: change the servings on a recipe and every amount is rescaled on the
   spot, with kitchen fractions for cups and spoons (`1 1/2 cups`) and decimals for
   metric amounts (`375 g`).
@@ -27,15 +28,18 @@ Stimulus) for the interactive parts, PostgreSQL for storage.
   Every cell also has an _Add_ menu for touch screens and keyboards.
 - **Grocery list**: built from the week's plan. Ingredients are scaled to the planned
   servings, matched by name (`Onions`, `large onion` and `onion` are one line) and
-  added up across units: g and kg, ml and l, tsp, tbsp and cups.
+  added up across units: g and kg, oz and lb, ml and l, tsp, tbsp and cups.
   Sorted by aisle, with items you can tick off, extra items that aren't in any recipe,
   a print layout and a plain text version for pasting into a message.
 - **Pantry**: what you already have. Staples without an amount (salt, olive oil)
   never go on the list; items with an amount (`1 kg flour`) are subtracted from it.
 - **Favourites and search**: star recipes, search by title, description or
   ingredient, filter by tag or favourites and sort by newest, name or quickest.
+- **Cook mode**: big text, one highlighted step at a time, arrow keys to move on, and
+  the screen kept awake while you cook (where the browser supports it).
 - **Accounts**: sign up, sign in, password reset by email, change name, email and
   password, delete the account and everything in it.
+- Works on phones, follows the system's dark mode and prints cleanly.
 
 ## Stack
 
@@ -61,7 +65,7 @@ submissions; the planner and favourite buttons answer with Turbo streams that re
 just the part of the page that changed, and the grocery list uses Turbo's morphing
 page refresh so ticking an item keeps your scroll position. Stimulus controllers in
 `app/javascript/controllers` add the browser-only behaviour (drag and drop, instant
-rescaling, search as you type). Their logic lives in plain modules under
+rescaling, search as you type, cook mode). Their logic lives in plain modules under
 `app/javascript/lib` so it can be unit tested without a browser.
 
 The domain rules are plain Ruby objects in `app/models`, with no database access:

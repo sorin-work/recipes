@@ -127,4 +127,10 @@ class RecipeImportTest < ActiveSupport::TestCase
     attributes = import("Tea\nTags: drinks, quick\nIngredients\n1 tea bag").recipe_attributes
     assert_equal "drinks, quick", attributes[:tag_list]
   end
+
+  test "refuses enormous pastes" do
+    result = import("Title\nIngredients\n" + ("1 egg\n" * 10_000))
+    assert_not result.valid?
+    assert_includes result.errors[:text], "is too long to be one recipe"
+  end
 end

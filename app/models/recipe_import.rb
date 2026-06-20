@@ -10,6 +10,7 @@ class RecipeImport
   include ActiveModel::Model
   include ActiveModel::Attributes
 
+  MAX_LENGTH = 50_000
 
   INGREDIENTS_HEADING = /\A(?:ingredients?|you(?:'ll| will) need|shopping list)\s*:?\z/i
   STEPS_HEADING = /\A(?:method|directions?|instructions?|steps?|preparation|how to make(?: it)?)\s*:?\z/i
@@ -27,6 +28,7 @@ class RecipeImport
   attribute :text, :string
 
   validates :text, presence: { message: "is empty - paste a recipe first" }
+  validates :text, length: { maximum: MAX_LENGTH, message: "is too long to be one recipe" }
   validate :looks_like_a_recipe
 
   # Attributes for Recipe.new.

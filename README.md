@@ -122,6 +122,17 @@ bin/dev                          # http://localhost:3000
 To use your own Postgres, set `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USERNAME`
 and `DATABASE_PASSWORD` (see `config/database.yml`).
 
+## Configuration
+
+| Variable          | Default     | Used for                                                  |
+| ----------------- | ----------- | --------------------------------------------------------- |
+| `DATABASE_URL`    |             | Production database (compose sets it)                     |
+| `SECRET_KEY_BASE` | dev value   | Signs session cookies; generate one with `bin/rails secret` |
+| `SEED_DEMO`       | `true`      | Load the demo account on start                            |
+| `APP_HOST`        | `localhost` | Host in password reset links                              |
+| `FORCE_SSL`       | `false`     | Set to `true` behind an HTTPS proxy                       |
+| `SMTP_ADDRESS` …  |             | SMTP for password reset emails; without it they are written to `tmp/mails` |
+
 ## Tests and lint
 
 ```bash

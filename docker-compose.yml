@@ -28,6 +28,7 @@ services:
       APP_HOST: ${APP_HOST:-localhost}
       APP_PORT: ${APP_PORT:-4402}
       FORCE_SSL: ${FORCE_SSL:-false}
+      TIME_ZONE: ${TIME_ZONE:-UTC}
       RAILS_LOG_LEVEL: ${RAILS_LOG_LEVEL:-info}
       # Creates demo@example.com / demo-password with sample recipes and a planned week.
       SEED_DEMO: ${SEED_DEMO:-true}

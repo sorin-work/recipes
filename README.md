@@ -132,6 +132,7 @@ and `DATABASE_PASSWORD` (see `config/database.yml`).
 | `APP_HOST`        | `localhost` | Host in password reset links                              |
 | `FORCE_SSL`       | `false`     | Set to `true` behind an HTTPS proxy                       |
 | `SMTP_ADDRESS` …  |             | SMTP for password reset emails; without it they are written to `tmp/mails` |
+| `TIME_ZONE`       | `UTC`       | What counts as "today" on the planner and home page       |
 
 ## Tests and lint
 

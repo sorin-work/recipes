@@ -86,6 +86,29 @@ The domain rules are plain Ruby objects in `app/models`, with no database access
 Every query goes through `Current.user`, so one account can never see or change
 another's recipes, plans or pantry.
 
+### How ingredients are read and added up
+
+1. `IngredientParser` takes a line like `1 (400 g) can chopped tomatoes`. `Quantity`
+   reads the number at the start (whole numbers, decimals, `3/4`, `1 1/2`, unicode
+   fractions, and ranges like `2-3` where the larger number wins). A bracket right
+   after it is a package size and goes in the note. The next word is looked up in
+   `Unit` (`tablespoons`, `Tbsp.`, `T` all mean `tbsp`), and whatever follows a comma
+   is a note.
+2. Quantities are stored with the unit's code (`g`, `tbsp`, `can`) and shown with
+   `Quantity.format`: fractions for spoons, cups and counted things, decimals for
+   metric units. The servings control rescales them in the browser with the same
+   rules (`app/javascript/lib/quantities.js`).
+3. For the grocery list each ingredient is scaled to the planned servings and turned
+   into an `Amount`. Mass is kept in grams and volume in millilitres, so amounts from
+   different recipes add up even when one says `500 g` and another `1 kg`. Counted
+   units (`2 cans`, `3 cloves`) only add up with themselves; when the same ingredient
+   is measured in ways that can't be combined both amounts are shown (`2 cans + 400 g`).
+4. Totals are shown in the unit that reads best: kilos from 1000 g, litres from
+   1000 ml. Volumes that came only from spoons and cups stay in spoons and cups and
+   move up from tsp to tbsp to cups as they grow (3 tsp is 1 tbsp, 4 tbsp is 1/4 cup).
+5. Pantry items are matched on the same normalised name and subtracted in the same
+   way. Anything fully covered moves to an _Already in your pantry_ list.
+
 ## Running with Docker
 
 ```bash

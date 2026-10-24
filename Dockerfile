@@ -8,7 +8,7 @@
 #   docker run -p 4402:3000 -e DATABASE_URL=... -e SECRET_KEY_BASE=... recipes
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=3.3.10
+ARG RUBY_VERSION=3.3.13
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here

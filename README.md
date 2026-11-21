@@ -173,6 +173,10 @@ tests import the modules directly.
 GitHub Actions (`.github/workflows/ci.yml`) runs RuboCop, Brakeman and the audits,
 the Rails tests against Postgres, the JavaScript tests and a Docker build.
 
+## Roadmap
+
+Ideas for what could come next are in [ROADMAP.md](ROADMAP.md).
+
 ## License
 
 MIT, see [LICENSE](LICENSE).

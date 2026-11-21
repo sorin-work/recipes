@@ -728,3 +728,156 @@ down:
   ranking, but language-specific stemming; trigrams are fine for titles and
   ingredient names.
 - Tests: query count tests and an `EXPLAIN` check in the controller tests.
+
+## Maybe
+
+### 29. Edit history of a recipe
+
+Recipes change as they are cooked: less sugar, a different tin, a step added.
+Saving overwrites the old version, and the old one is sometimes the one that
+worked.
+
+- On each save that changes ingredients, steps or servings, store the previous
+  version as JSON (`RecipeVersion`: recipe, data, created_at), keeping the last
+  20.
+- A "History" page with a line-by-line diff of ingredients and steps, and
+  "restore this version".
+- Tricky: `rebuild_ingredients` deletes and recreates every ingredient on each
+  save, so a diff by row id is meaningless; diff the text lines instead
+  (`ingredients_text`, `steps_text`).
+- Undecided: whether this is worth the storage and the page for a personal box.
+  Notes (`notes` on recipes) cover the "what I changed" case already; I would
+  wait for someone to miss an old version.
+- Tests: model tests for storing, trimming to 20 and restoring.
+
+### 30. A small API with tokens
+
+There is no API. Things people would do with one: add an item to the grocery
+list from a phone shortcut or a voice assistant, show today's dinner on a
+kitchen display, or read the week's plan from a home dashboard.
+
+- Personal tokens on the Account page (named, hashed at rest, shown once,
+  revocable), sent as a bearer token.
+- A handful of JSON endpoints: today's and this week's plan, the grocery list
+  with its items and checks, adding a grocery extra, ticking an item, and a
+  recipe by id.
+- The same controllers with `respond_to :json` where it fits, or a small
+  `Api::` namespace with its own base controller that authenticates by token
+  and skips CSRF.
+- Tricky: tokens must not open the web pages. The base controller for the API
+  authenticates only by token, and the web controllers only by cookie.
+- Undecided: whether anyone would use it. I lean towards building the two
+  grocery endpoints first, which is what shortcuts need.
+- Tests: controller tests for each endpoint, a revoked token, and another user's
+  data returning 404.
+
+### 31. Nutrition estimates
+
+Calories and macros per serving are a common ask, and usually wrong when apps
+guess them. Doing it honestly needs a food database and amounts in grams.
+
+- A food table built from a public domain dataset (USDA FoodData Central's
+  Foundation and SR Legacy foods) imported once with a rake task into a local
+  table, no live service.
+- Map ingredient keys to foods (automatic for common names, editable per user),
+  convert amounts to grams (needs item 18 for volumes), and sum per serving.
+- Show "about 520 kcal per serving, 3 ingredients not counted" with the list of
+  what was not matched, never a precise-looking number.
+- Depends on item 18: without densities most volume amounts cannot be counted.
+- Tricky: counted units ("1 onion", "2 eggs") need typical weights per item.
+- Undecided: whether the size of the dataset and the mapping work are worth it
+  for a home cook's recipe box. This is why it is a Maybe.
+- Tests: model tests for the sum with matched, unmatched and counted
+  ingredients.
+
+### 32. The grocery list offline
+
+Shops have bad reception. The grocery list is a server page; ticking an item
+is a form post, which fails in a basement supermarket.
+
+- A web app manifest and a service worker that caches the current grocery list
+  page and queues ticks made offline, replaying them when back online.
+- Ticks are idempotent already (`find_or_create_by!` and `delete_all` in
+  `GroceryChecksController`), which makes replaying safe.
+- Tricky: Turbo and service workers together are fiddly, and the CSP
+  (`config/initializers/content_security_policy.rb`) needs `worker-src
+  'self'`.
+- Tricky: two people shopping (item 10) with one offline: replaying an old
+  untick after the other person ticked it. Last write wins is acceptable for a
+  grocery list.
+- Undecided: the plain text version (`GroceryList#to_text`) pasted into a notes
+  app already works offline. This item is only worth it if people actually
+  shop from the app.
+- Tests: JavaScript tests for the queue in a `lib/` module; the service worker
+  itself is checked by hand.
+
+### 33. Translations
+
+All text is English in the views and controllers. The ingredient parser also
+reads English: units (`Unit` aliases), descriptors (`IngredientName`
+`DESCRIPTORS`), headings in `RecipeImport` and keywords in `Aisle`.
+
+- Rails I18n for the interface, with the language on the Account page.
+- The harder part is the cooking vocabulary. Units and headings in a second
+  language (German: `EL`, `TL`, `Zutaten`, `Zubereitung`) can be added to the
+  same tables, since parsing does not need to know the language; singular
+  forms for name matching do need it (`singularize` is English).
+- Tricky: `IngredientName.key` uses the English inflector for plurals; a second
+  language needs its own rule or a word list, or "Zwiebeln" and "Zwiebel" stay
+  two lines.
+- Undecided: whether to do the interface without the parser. That is half the
+  work for a confusing result. I would only do both, with someone who cooks in
+  the second language.
+- Tests: model tests for parsing in the second language; a controller test for
+  a page rendered in it.
+
+### 34. Printing a cookbook
+
+Recipes print one at a time with a clean layout (`print.css`). People like to
+give a printed collection of family recipes as a present.
+
+- Choose recipes (by tag or by ticking) and get one printable page or a PDF
+  with a title page, a table of contents and one recipe per page.
+- HTML with print CSS and page breaks is enough for "print to PDF" in the
+  browser; generating PDFs on the server needs a headless browser or a PDF
+  library, which is heavy for this app.
+- Tricky: photos and page breaks. A recipe longer than a page should not break
+  inside an ingredient group.
+- Undecided: server-side PDF. I lean towards browser printing only.
+- Tests: a controller test that the page contains the chosen recipes in order.
+
+### 35. Two-step sign in
+
+Accounts are protected by a password. Recipes are not secret, but an account
+holds an email address, notes and possibly photos of a home, and a takeover
+would let someone delete everything.
+
+- TOTP codes with the `rotp` gem, set up from the Account page with a QR code
+  (`rqrcode`), and ten single-use recovery codes stored hashed.
+- Sign in asks for the code after the password when it is turned on.
+- Tricky: password reset must not skip the second step, or it becomes the way
+  around it.
+- Tricky: the rate limit on `SessionsController#create` must cover the code
+  step too.
+- Tests: controller tests for enabling, signing in with a code, a wrong code,
+  a recovery code used once, and reset still asking for the code.
+
+### 36. More than one photo
+
+A recipe has one photo (`has_one_attached :photo`). People want a photo of the
+finished dish plus a few of the tricky steps, or a scan of the handwritten card
+the recipe came from.
+
+- `has_many_attached :photos` with an order and a chosen cover, or a photo per
+  step.
+- A scan of a handwritten card is the most valuable case: it keeps the original
+  next to the typed version.
+- Tricky: the migration from `photo` to `photos` keeps existing photos as the
+  covers.
+- Tricky: every photo needs the access rule from item 4, and the export from
+  item 2 must include them.
+- Depends on item 4, so new photos do not start out with public links.
+- Undecided: per-step photos change the step editor from a text area to
+  something richer. I would start with a gallery and a cover only.
+- Tests: model tests for the cover and order; controller tests for upload,
+  reorder and the access rule.
